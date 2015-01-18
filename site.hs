@@ -59,20 +59,26 @@ main = hakyllWith config $ do
                 where
                   disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
 
+    let postsPerPage = 10
     tagsRules tags $ \tag pattern -> do
+      let pagePath page | page == 1 = fromCapture "tags/*.html" tag
+                        | otherwise = fromFilePath $ "tags/"++tag++"/page/"++show (page::PageNumber)++".html"
+      tagsPaginate <- buildPaginateWith (return.paginateEvery postsPerPage.reverse) pattern pagePath
       let title = "Посты с тегом " ++ tag
 
-      route idRoute
-      compile $ do
-        let posts = loadAllSnapshots pattern "content" >>=
-                    recentFirst
-        let ctx = constField "title" title `mappend`
-                  listField "posts" postCtx posts `mappend`
-                  myDefaultContext
-        makeItem ""
-          >>= loadAndApplyTemplate "templates/tags.html" ctx
-          >>= loadAndApplyTemplate "templates/default.html" ctx
-          >>= relativizeUrls
+      paginateRules tagsPaginate $ \pageNum pattern' -> do
+          route idRoute
+          compile $ do
+            let posts = loadAllSnapshots pattern' "content" >>=
+                        recentFirst
+            let ctx = constField "title" title `mappend`
+                      listField "posts" postCtx posts `mappend`
+                      paginateContext tagsPaginate pageNum `mappend`
+                      myDefaultContext
+            makeItem ""
+              >>= loadAndApplyTemplate "templates/archive.html" ctx
+              >>= loadAndApplyTemplate "templates/default.html" ctx
+              >>= relativizeUrls
 
     match "static/*" $ do
         route   $ setExtension "html"
@@ -92,8 +98,7 @@ main = hakyllWith config $ do
             >>= relativizeUrls
 
     -- archive pages
-    let postsPerPage = 10
-        pagePath page = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
+    let pagePath page = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
     archivePaginate <- buildPaginateWith (return.paginateEvery postsPerPage.drop postsPerPage.reverse) "posts/*" pagePath
     paginateRules archivePaginate $ \pageNum pattern -> do
         route idRoute
