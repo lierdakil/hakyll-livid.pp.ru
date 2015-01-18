@@ -1,11 +1,12 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
 import           Control.Monad
 import           Data.Maybe
+import           Data.Monoid     (mappend)
 import           Hakyll
 -- import           Data.List
 import           System.FilePath
+import           System.Locale
 
 
 --------------------------------------------------------------------------------
@@ -49,11 +50,32 @@ main = hakyllWith config $ do
                 tagCloudField "tagCloud" 80 200 tags `mappend`
                 navigationField                      `mappend`
                 defaultContext
+        timeLocale = defaultTimeLocale {
+              wDays = [("Понедельник","Пн"),
+                       ("Вторник",    "Вт"),
+                       ("Среда",      "Ср"),
+                       ("Четверг",    "Чт"),
+                       ("Пятница",    "Пт"),
+                       ("Суббота",    "Сб"),
+                       ("Воскресенье","Вс")],
+              months = [("Января",  "Янв"),
+                        ("Февраля", "Фев"),
+                        ("Марта",   "Мар"),
+                        ("Апреля",  "Апр"),
+                        ("Мая",     "Мая"),
+                        ("Июня",    "Июн"),
+                        ("Июля",    "Июл"),
+                        ("Августа", "Авг"),
+                        ("Сентября","Сен"),
+                        ("Октября", "Окт"),
+                        ("Ноября",  "Ноя"),
+                        ("Декабря", "Дек")]
+        }
         postCtx =
-                dateField "date" "%B %e, %Y"    `mappend`
-                teaserField "teaser" "content"  `mappend`
-                field "disqusId" disqusId       `mappend`
-                tagsField "tags" tags           `mappend`
+                dateFieldWith timeLocale "date" "%e %B, %Y"    `mappend`
+                teaserField "teaser" "content"                 `mappend`
+                field "disqusId" disqusId                      `mappend`
+                tagsField "tags" tags                          `mappend`
                 myDefaultContext
                 where
                   disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
