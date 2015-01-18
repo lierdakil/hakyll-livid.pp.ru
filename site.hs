@@ -17,8 +17,9 @@ main = hakyllWith config $ do
         compile copyFileCompiler
 
     match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+        route   $ setExtension "css"
+        compile $ liftM (fmap compressCss) $ getResourceString >>=
+                  withItemBody (unixFilter "lessc" ["-"])
 
     -- tag pages
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
