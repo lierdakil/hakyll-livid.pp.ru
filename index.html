@@ -2,6 +2,6 @@
 title: Home
 ---
 $partial("templates/post-list.html")$
-$if(archiveUrl)$
-<a href="$archiveUrl$" class="archive older">←</a>
+$if(navigation("archive/page/1.html",""))$
+$navigation("archive/page/1.html","←")$
 $endif$

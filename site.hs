@@ -66,7 +66,6 @@ main = hakyllWith config $ do
                     recentFirst
         let ctx = constField "title" title `mappend`
                   listField "posts" postCtx posts `mappend`
-                  tagCloud `mappend`
                   myDefaultContext
         makeItem ""
           >>= loadAndApplyTemplate "templates/tags.html" ctx
@@ -76,7 +75,6 @@ main = hakyllWith config $ do
     match "static/*" $ do
         route   $ setExtension "html"
         let ctx =
-                  tagCloud `mappend`
                   myDefaultContext
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" ctx
@@ -89,12 +87,11 @@ main = hakyllWith config $ do
           route' <- getRoute identifier
           let route1 = fromMaybe "undefined" route'
           let postCtx' = constField "url" (replaceAll "%2F" (const "/") $ urlEncode route1) `mappend`
-                          constField "post_id" (toFilePath identifier) `mappend`
                           postCtx
           pandocCompiler
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html"    postCtx'
-            >>= loadAndApplyTemplate "templates/default.html" (tagCloud `mappend` postCtx)
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
     -- archive pages
@@ -110,9 +107,8 @@ main = hakyllWith config $ do
                 archiveCtx =
                   listField "posts" postCtx posts     `mappend`
                   constField "title" "Архив"          `mappend`
-                  tagCloud `mappend`
-                  constField "archive_active" "active" `mappend`
                   paginateContext archivePaginate pageNum `mappend`
+                  constField "previousPageUrl" "/"         `mappend`
                   myDefaultContext
 
             makeItem ""
@@ -123,18 +119,13 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            archive <- getRoute $ pagePath 1
-            let archiveUrl = fromMaybe missingField $ liftM (constField "archiveUrl") archive
-                posts =
+            let posts =
                   liftM (take postsPerPage) $
                   loadAllSnapshots "posts/*" "content" >>=
                   recentFirst
                 indexCtx =
-                  navigationField `mappend`
                   listField "posts" postCtx posts    `mappend`
                   constField "title" "Главная"       `mappend`
-                  archiveUrl                         `mappend`
-                  tagCloud                           `mappend`
                   myDefaultContext
 
             getResourceBody

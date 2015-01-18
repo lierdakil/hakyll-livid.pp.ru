@@ -28,7 +28,9 @@
               $navigation("index.html","Главная")$
               $navigation("static/about.markdown","О сайте")$
               $navigation("static/author.markdown","Об авторе")$
+              $if(navigation("archive/page/1.html",""))$
               $navigation("archive/page/1.html","Архив","archive/page/*")$
+              $endif$
             </div>
         </div>
         <div id="sidebar">
