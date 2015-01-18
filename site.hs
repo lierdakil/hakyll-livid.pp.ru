@@ -129,7 +129,9 @@ main = hakyllWith config $ do
 
     match "templates/*" $ compile templateCompiler
 
-    let feedCtx = postCtx `mappend` bodyField "description"
+    let feedCtx = postCtx `mappend`
+                  teaserField "description" "content" `mappend`
+                  bodyField "description"
         posts = fmap (take 10) . recentFirst =<<
                   loadAllSnapshots "posts/*" "content"
     create ["rss.xml"] $ do
