@@ -40,32 +40,25 @@ div#header #navigation ul {
   margin: 0;
 }
 
-div#header #navigation li {
-    display: inline-block;
-    background-color: white;
-    padding: 10px;
-    margin: 0px;
-}
-
-div#header #navigation li a {
+div#header #navigation a {
+  display: inline-block;
+  background-color: white;
+  padding: 10px;
+  margin: 0px;
   color: #6A6A6A;
   font-size: 12px;
   font-weight: bold;
   text-decoration: none;
   text-transform: uppercase;
-  display: inline-block;
 }
 
-div#header #navigation li:hover {
+div#header #navigation a:hover {
   background-color: #DADADA;
-}
-
-div#header #navigation li.active {
-  background-color: #DADADA;
-}
-
-div#header #navigation li:hover a {
   color: #000;
+}
+
+div#header #navigation a.active {
+  background-color: #DADADA;
 }
 
 div#header #navigation a:active {

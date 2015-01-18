@@ -25,12 +25,10 @@
                 <a href="/">Красноглазый Блог</a>
             </div>
             <div id="navigation">
-              <ul>
-                <li class='$if(is_active)$$is_active("index.html")$$endif$'><a href="/">Главная</a></li>
-                <li class='$if(is_active)$$is_active("static/about.markdown")$$endif$'><a href="/static/about.html">О сайте</a></li>
-                <li class='$if(is_active)$$is_active("static/author.markdown")$$endif$'><a href="/static/author.html">Об авторе</a></li>
-                <li class='$if(archive_active)$active$endif$'><a href="/archive/page/1.html">Архив</a></li>
-              </ul>
+              $navigation("index.html","Главная")$
+              $navigation("static/about.markdown","О сайте")$
+              $navigation("static/author.markdown","Об авторе")$
+              $navigation("archive/page/1.html","Архив","archive/page/*")$
             </div>
         </div>
         <div id="sidebar">

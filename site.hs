@@ -5,14 +5,13 @@ import           Control.Monad
 import           Data.Maybe
 import           Network.HTTP
 import           Hakyll
-import           Data.List
+-- import           Data.List
 import           System.FilePath
 
 
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
-    let postsOnHomePage = 10
     match ("images/*" .||. "files/*") $ do
         route   idRoute
         compile copyFileCompiler
@@ -25,10 +24,38 @@ main = hakyllWith config $ do
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     let tagCloud = tagCloudField "tagCloud" 80 200 tags
-    let isActive [] _ = return ""
-        isActive args item | myid <- toFilePath $ itemIdentifier item,
-                             myid == head args = return "active"
-                           | otherwise         = return ""
+    let
+        list !!? i | i < length list = Just $ list !! i
+                   | otherwise = Nothing
+        navigationField = functionField "navigation" navigationLink
+        navigationLink args item = do
+                  let filePath = head args
+                      text = args !! 1
+                      pattern = fromMaybe (fromList [identifier]) $
+                                    liftM fromGlob $ args !!? 2
+                      identifier = fromFilePath filePath
+                      cls =
+                            if matches pattern (itemIdentifier item) then
+                              "class=\"active\""
+                            else
+                              ""
+                  Just argUrl <- getRoute identifier
+                  return $
+                      "<a href=\"/"++argUrl++"\""++
+                      cls ++
+                      ">"++ text ++"</a>"
+
+    let myDefaultContext =
+                tagCloud        `mappend`
+                navigationField `mappend`
+                defaultContext
+        postCtx =
+                dateField "date" "%B %e, %Y"    `mappend`
+                teaserField "teaser" "content"  `mappend`
+                field "disqusId" disqusId       `mappend`
+                myDefaultContext
+                where
+                  disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
 
     tagsRules tags $ \tag pattern -> do
       let title = "Посты с тегом " ++ tag
@@ -40,7 +67,7 @@ main = hakyllWith config $ do
         let ctx = constField "title" title `mappend`
                   listField "posts" postCtx posts `mappend`
                   tagCloud `mappend`
-                  defaultContext
+                  myDefaultContext
         makeItem ""
           >>= loadAndApplyTemplate "templates/tags.html" ctx
           >>= loadAndApplyTemplate "templates/default.html" ctx
@@ -49,9 +76,8 @@ main = hakyllWith config $ do
     match "static/*" $ do
         route   $ setExtension "html"
         let ctx =
-                  functionField "is_active" isActive `mappend`
                   tagCloud `mappend`
-                  defaultContext
+                  myDefaultContext
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
@@ -62,25 +88,7 @@ main = hakyllWith config $ do
           identifier <- getUnderlying
           route' <- getRoute identifier
           let route1 = fromMaybe "undefined" route'
-          let spanList _ [] = ([],[])
-              spanList func list@(x:xs) =
-                                      if func list
-                                        then (x:ys,zs)
-                                        else ([],list)
-                                        where (ys,zs) = spanList func xs
-          let breakList func = spanList (not . func)
-          let split _ [] = []
-              split delim str =
-                let (firstline, remainder) = breakList (isPrefixOf delim) str
-                in
-                firstline : case remainder of
-                  [] -> []
-                  x -> if x == delim
-                    then [[]]
-                    else split delim
-                    (drop (length delim) x)
-          let replace old new = intercalate new . split old
-          let postCtx' = constField "url" (replace "%2F" "/" $ urlEncode route1) `mappend`
+          let postCtx' = constField "url" (replaceAll "%2F" (const "/") $ urlEncode route1) `mappend`
                           constField "post_id" (toFilePath identifier) `mappend`
                           postCtx
           pandocCompiler
@@ -89,39 +97,23 @@ main = hakyllWith config $ do
             >>= loadAndApplyTemplate "templates/default.html" (tagCloud `mappend` postCtx)
             >>= relativizeUrls
 
-    let navigationField = functionField "navigation" navigationLink
-        navigationLink args item = do
-                  let filePath = head args
-                      text = args !! 1
-                      activeClass = args !! 2
-                      identifier = fromFilePath filePath
-                  Just argUrl <- getRoute identifier
-                  let cls =
-                        if identifier==itemIdentifier item then
-                          activeClass
-                        else
-                          ""
-                  return $
-                      "<a href=\""++argUrl++"\""++
-                      "class=\""++ cls ++"\"" ++
-                      ">"++ text ++"</a>"
-
     -- archive pages
-    let pagePath page = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
-    archivePaginate <- buildPaginateWith (return.paginateEvery postsOnHomePage.drop postsOnHomePage.reverse) "posts/*" pagePath
+    let postsPerPage = 10
+        pagePath page = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
+    archivePaginate <- buildPaginateWith (return.paginateEvery postsPerPage.drop postsPerPage.reverse) "posts/*" pagePath
     paginateRules archivePaginate $ \pageNum pattern -> do
         route idRoute
         compile $ do
             let posts =
                   loadAllSnapshots pattern "content" >>=
                   recentFirst
-            let archiveCtx =
-                    listField "posts" postCtx posts     `mappend`
-                    constField "title" "Архив"          `mappend`
-                    tagCloud `mappend`
-                    constField "archive_active" "active" `mappend`
-                    paginateContext archivePaginate pageNum `mappend`
-                    defaultContext
+                archiveCtx =
+                  listField "posts" postCtx posts     `mappend`
+                  constField "title" "Архив"          `mappend`
+                  tagCloud `mappend`
+                  constField "archive_active" "active" `mappend`
+                  paginateContext archivePaginate pageNum `mappend`
+                  myDefaultContext
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -133,18 +125,17 @@ main = hakyllWith config $ do
         compile $ do
             archive <- getRoute $ pagePath 1
             let archiveUrl = fromMaybe missingField $ liftM (constField "archiveUrl") archive
-            let posts =
-                  liftM (take postsOnHomePage) $
+                posts =
+                  liftM (take postsPerPage) $
                   loadAllSnapshots "posts/*" "content" >>=
                   recentFirst
-            let indexCtx =
-                    navigationField `mappend`
-                    listField "posts" postCtx posts    `mappend`
-                    constField "title" "Главная"       `mappend`
-                    archiveUrl                         `mappend`
-                    tagCloud                           `mappend`
-                    functionField "is_active" isActive `mappend`
-                    defaultContext
+                indexCtx =
+                  navigationField `mappend`
+                  listField "posts" postCtx posts    `mappend`
+                  constField "title" "Главная"       `mappend`
+                  archiveUrl                         `mappend`
+                  tagCloud                           `mappend`
+                  myDefaultContext
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
@@ -154,7 +145,7 @@ main = hakyllWith config $ do
     match "templates/*" $ compile templateCompiler
 
     let feedCtx = postCtx `mappend` bodyField "description"
-    let posts = fmap (take 10) . recentFirst =<<
+        posts = fmap (take 10) . recentFirst =<<
                   loadAllSnapshots "posts/*" "content"
     create ["rss.xml"] $ do
       route idRoute
@@ -165,14 +156,6 @@ main = hakyllWith config $ do
 
 
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y"    `mappend`
-    teaserField "teaser" "content"  `mappend`
-    field "disqusId" disqusId       `mappend`
-    defaultContext
-    where
-      disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
 
 myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration = FeedConfiguration
