@@ -1,0 +1,77 @@
+---
+author: Livid
+date: 2013-12-13 05:29:07+00:00
+title: Заставляем Xen обновлять микрокод процессора
+wordpress_id: 620
+tags: Gentoo, kernel, microcode, xen ,Gentoo, kernel, patch
+...
+
+Из-под dom0 микрокод конвенциональными методами (типа microcode\_ctl) не
+обновляется. Но xen начиная с 4.2 умеет обновлять микрокод сам. Увы,
+документация практически никакая, поэтому вот мои 5 копеек.
+
+<!--more-->
+
+
+
+Во-первых, нужен собственно микрокод, причем в бинарном виде. В portage
+он, к счастью, есть, под названием sys-apps/microcode-data для intel и
+sys-kernel/linux-firmware для AMD. Этот ебилд ставит в
+/lib/firmware/intel-ucode или /lib/firmware/amd-ucode несколько файлов,
+которые и представляют собой бинарный микрокод для разных процессоров.
+
+Для случая с intel таких файлов там больше десятка, и их надо объединить
+в один. Сделать это можно банальной конкатенацией, т.е.
+
+```bash
+cat /lib/firmware/intel-ucode/* > /boot/microcode.bin
+```
+
+
+В случае AMD все немного проще, сразу есть файл
+/lib/firmware/amd-ucode/microcode\_amd.bin
+
+Как можно заметить, файл с микрокодом я предлагаю положить в
+/boot/microcode.bin. После этого нужно пропатчить grub.cfg. Дальше
+описываю для случая grub2.
+
+Самый простой способ -- пропатчить /etc/grub.d/20\_linux\_xen.
+
+```diff
+--- /etc/grub.d/20_linux_xen.orig   2013-12-13 09:06:53.248765877 +0400
++++ /etc/grub.d/20_linux_xen    2013-12-13 09:00:28.158228730 +0400
+@@ -119,6 +119,9 @@
+   printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
+   xmessage="$(gettext_printf "Loading Xen %s ..." ${xen_version})"
+   lmessage="$(gettext_printf "Loading Linux %s ..." ${version})"
++  if test -e "${dirname}/microcode.bin" ; then
++      xen_args="${xen_args} ucode=-1"
++  fi
+   sed "s/^/$submenu_indentation/" << EOF
+    echo    '$(echo "$xmessage" | grub_quote)'
+         if [ "\$grub_platform" = "pc" -o "\$grub_platform" = "" ]; then
+@@ -139,6 +142,11 @@
+ EOF
+   fi
+
++  if test -e "${dirname}/microcode.bin" ; then
++    sed "s/^/$submenu_indentation/" << EOF
++ module  ${rel_dirname}/microcode.bin
++EOF
++  fi
+   sed "s/^/$submenu_indentation/" << EOF
+ }
+ EOF
+```
+
+
+После этого можно делать update-grub, grub2-mkconfig и т.п.
+
+Для тех, кто не хочет ничего патчить, идея такая: microcode.bin должен
+быть последним загружаемым грубом модулем, а к xen надо добавить
+параметр ucode=-1. Это собственно включит загрузку микрокода xen-ом.
+
+Можно перезагружаться и радоваться. К сожалению, проблема, которую я
+надеялся так исправить -- осталась. Если вдруг кто знает, как заставить
+звук по встроенному HDMI на Intel i7-4770 адекватно работать при
+включенном iommu (VT-d) -- дайте знать.

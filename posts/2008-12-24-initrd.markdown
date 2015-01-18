@@ -1,0 +1,51 @@
+---
+author: Livid
+date: 2008-12-24 20:00:40+00:00
+title: Initrd
+wordpress_id: 171
+tags: Gentoo, initrd, kernel ,Gentoo, kernel, patch
+...
+
+Помучившись с "ручным" initrd (а он мне нужен, ибо у меня все, кроме
+/boot на lvm), пришел к выводу, что проще немного подправить
+[редхатовский
+lvm2create\_initrd](http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/LVM2/scripts/lvm2create_initrd/lvm2create_initrd?content-type=text/plain&cvsroot=lvm2&only_with_tag=HEAD),
+чтобы он нормально создавал устройства.
+Под катом патч.
+
+<!--more-->
+
+
+
+    58,60c58,60
+    < BASICDEVICES=${BASICDEVICES:-"std consoleonly fd"}
+    < BLOCKDEVICES=${BLOCKDEVICES:-"md hda hdb hdc hdd sda sdb sdc sdd"}
+    < MAKEDEV=${MAKEDEV:-"debian"}
+    ---
+    > BASICDEVICES=${BASICDEVICES:-"std console"}
+    > BLOCKDEVICES=${BLOCKDEVICES:-"sda sdb sdc sdd sde sdf"}
+    > MAKEDEV=${MAKEDEV:-"gentoo"}
+    63c63
+    < #INITRDSIZE=4096
+    ---
+    > INITRDSIZE=32768
+    85c85
+    <   [ "`mount | grep $DEVRAM`" ] && verbose "unmounting $DEVRAM" && umount $DEVRAM
+    ---
+    >   [ "`mount | grep $TMPMNT`" ] && verbose "unmounting $TMPMNT" && umount $TMPMNT
+    382c382
+    <     (cd $TMPMNT/dev; /usr/sbin/MAKEDEV $OPT_Q $BASICDEVICES $BLOCKDEVICES)
+    ---
+    >     (cd $TMPMNT/dev; /sbin/MAKEDEV $OPT_Q -d $TMPMNT/dev $BASICDEVICES $BLOCKDEVICES)
+    463c463
+    < umount $DEVRAM
+    ---
+    > umount $TMPMNT
+
+
+Измените BLOCKDEVICES и INITRDSIZE под свои нужды.
+Единственное, что я не победил (насколько нашел) - это определение
+размера образа, поэтому размер приходится задавать руками (убедитесь,
+что размер образа не превышает объема ramdisk-ов в настройках ядра).
+Естественно, это нужно только людям, собирающим свое ядро, а не
+пользующим genkernel.

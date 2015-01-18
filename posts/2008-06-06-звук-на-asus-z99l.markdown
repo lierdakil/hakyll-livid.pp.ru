@@ -1,0 +1,149 @@
+---
+author: Livid
+date: 2008-06-06 19:09:35+00:00
+title: Звук на Asus Z99L
+wordpress_id: 7
+tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
+...
+
+А так же на всех ноутбуках со звуковыми чипами Realtek ALC861VD и
+подобными на Intel ICH8.
+
+Где-то неделю назад я купил вышеозначенный ноутбук. "Из коробки" не
+заработали: wi-fi, звук и кардридер. Последнее пока так и пребывает в
+нерабочем состоянии, по причине низкой важности для меня. Про wi-fi
+напишу немного позже, там все просто. А вот звук я победил буквально
+недавно.
+
+**P.S. Немного поэкспериментировав, понял, что, оказывется, в Hardy все
+хорошо, за исключением того, что по умолчанию в alsamixer отключены все
+каналы... Это стоило мне не одного вечера, да. Так что, вся информация
+под катом относится к Ubuntu Gutsy (7.10), а владельцам Hardy рекомендую
+проверить alsamixer:**
+
+    $ alsamixer -D hw
+
+
+
+<!--more-->
+
+
+
+Во-первых, узнать, какой у вас чип можно, выполнив команду:
+
+    $ grep Codec /proc/asound/card0/codec#*
+
+
+В моем случае она возвращает:
+
+    /proc/asound/card0/codec#0:Codec: Realtek ALC660-VD
+    /proc/asound/card0/codec#1:Codec: Motorola Si3054
+
+
+Второе - модем (который, кстати, тоже не настроен, ибо проверять не на
+чем...)
+
+Процесс описан в ubuntu wiki. Но почему-то там я посмотрел в последнюю
+очередь. Здесь я приведу лишь конспективный перевод.
+
+1.  Нужно поставить последнюю версию ALSA (на данный момент это 1.0.16)
+    1.  Скачать с <http://www.alsa-project.org/> пакеты alsa-driver,
+        alsa-lib, alsa-utils (я храню такие исходники в /root/src и
+        собираю их из-под рута, но можно использовать любую директорию)
+    2.  Распаковать их:
+
+            $ tar jxf alsa-driver* && tar jxf alsa-lib* && tar jxf alsa-utils*
+
+        
+
+    3.  Собрать - для этого, как и для любой сборки из исходников, нужен
+        мета-пакет build-essential:
+
+            $ sudo apt-get install build-essential
+
+        
+
+        1.  alsa-driver
+
+                $ cd alsa-driver*
+                $ ./configure --with-cards=hda-intel
+                $ make
+                $ sudo make install
+
+            
+            Здесь совершенно точно понадобится пакет linux-headers для
+            вашего ядра. Если его нет, то нужно выполнить
+
+                $ sudo apt-get install linux-headers-$(uname -r)
+
+            
+
+        2.  alsa-lib
+
+                $ cd ../alsa-lib*
+                $ ./configure && make && sudo make install
+
+            
+            Для этого пакета нужны заголовки ncurses:
+
+                $ sudo apt-get install libncurses5-dev
+
+            
+
+        3.  alsa-utils
+
+                $ cd ../alsa-utils*
+                $ ./configure && make && sudo make install
+
+            
+            Для этого пакета нужен gettext:
+
+                $ sudo apt-get install gettext
+
+            
+            Однако нужен он для переводов (японский и русский), поэтому
+            я просто отредактировал первую строчку alsaconf/po/Makefile,
+            убрав из первой строчки все после знака "=". Конечно,
+            alsaconf у меня на английском, но это меня нисколько не
+            заботит. Если вы все же хотите перевод, ставте gettext. Если
+            make все равно ругается, попробуйте выполнить команды:
+
+                $ touch alsaconf/po/t-ja.gmo
+                $ touch alsaconf/po/t-ru.gmo
+
+            
+
+        
+
+    
+2.  Создать файл /etc/modutils/alsa (имя не столь важно, на самом деле)
+    следующего содержания (\$ sudo nano /etc/modules/alsa)
+
+        alias char-major-116 snd
+        alias snd-card-0 snd-hda-intel
+        # module options should go here
+        options snd-hda-intel model=lenovo
+        # OSS/Free
+        alias char-major-14 soundcore
+        alias sound-slot-0 snd-card-0
+        # card #1
+        alias sound-service-0-0 snd-mixer-oss
+        alias sound-service-0-1 snd-seq-oss
+        alias sound-service-0-3 snd-pcm-oss
+        alias sound-service-0-8 snd-seq-oss
+        alias sound-service-0-12 snd-pcm-oss
+
+    
+
+3.  Перезагрузиться
+4.  В alsamixer выставить нужные каналы на максимум и отключить стоящий
+    по умолчанию Mute (делается это клавишей M)
+
+
+Собственно говоря, это все, что требуется. Не так сложно, но есть тонкие
+моменты.
+
+Оригинал лежит здесь:
+<https://wiki.ubuntu.com/Gutsy_Intel_HD_Audio_Controller>
+О том, как собирать Alsa, взято отсюда:
+[https://help.ubuntu.com/community/HdaIntelSoundHowto](https://wiki.ubuntu.com/Gutsy_Intel_HD_Audio_Controller)

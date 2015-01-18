@@ -1,0 +1,54 @@
+---
+author: Livid
+date: 2008-06-06 15:00:29+00:00
+title: Немного apache
+wordpress_id: 4
+tags: Apache, BASh, Debian ,Apache, Debian
+...
+
+В процессе создания этого сайта, натолкнулся на одно удобство в
+Debian'овском дистрибутиве apache2.
+
+Заключается оно вот в чем: модули и виртуальные сайты apache имеют
+отдельные конфигурационные файлы (на мой вкус весьма удобно),
+находящиеся соответственно в /etc/apache2/mods-available и
+/etc/apache2/sites-available
+
+Чтобы они обрабатывались, приходится создавать на нужные модули/сайты
+симлинки в mods-enabled и sites-enabled соответственно (можно, конечно,
+включить все и сразу правкой конфига, но нужно ли?). Вручную это
+делается за минуты, однако удобнее оказывается работать со скриптами
+a2ensite, a2enmod, a2dissite и a2dismod. О назначении их несложно
+догадаться из названия.
+
+
+<!--more-->
+
+
+
+Вот так, например, работает a2ensite:
+
+    $ sudo a2ensite
+    Which site would you like to enable?
+    Your choices are: livid.pp.ru septem.org.ru
+    Site name? livid.pp.ru
+    Site livid.pp.ru installed; run /etc/init.d/apache2 reload to enable.
+    $ sudo /etc/init.d/apache2 reload
+
+
+Правда и здесь не без ложки дегтя. Дело в том, что для сайта "по
+умолчанию" (default) при установке пакета создается симлинк 000-default.
+Если вы выставляли приоритеты вручную, то скрипты работать откажутся.
+
+У меня уже работало несколько сайтов с такими симлинками, поэтому, дабы,
+не мучиться, я выполнил такие команды:
+
+\$ cd /etc/apache2/sites-enabled
+\$ sudo find . -name '[0-9]\*-\*' ! -name '000-default' -execdir rename
+'s/[0-9]+-//' \\{\\} \\;
+\$ sudo /etc/init.d/apache2 reload
+\* Reloading web server config apache2                             [ OK
+]
+\$
+
+Кстати, о массовом переименовании файлов расскажу чуть позже.

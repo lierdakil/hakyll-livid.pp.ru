@@ -1,0 +1,13 @@
+---
+author: Livid
+date: 2011-05-08 23:50:45+00:00
+title: Особенности Softraid
+wordpress_id: 514
+tags: Gentoo, kernel, mdadm, softraid ,kernel, Без рубрики, Железо
+...
+
+Линуксоиду на заметку: удаляя хард (или раздел) из softraid, стоит
+забивать нулями суперблок рейда -- иначе потом можно долго удивляться
+наеадекватному поведению `mdadm --assemble --scan.`
+
+`mdadm --zero-superblock /dev/sdsomething` должен справляться с задачей.

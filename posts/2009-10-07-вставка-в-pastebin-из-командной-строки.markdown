@@ -1,0 +1,92 @@
+---
+author: Livid
+date: 2009-10-07 21:56:56+00:00
+title: Вставка в pastebin из командной строки
+wordpress_id: 367
+tags: BASh, pastebin ,BASh, Soft
+...
+
+Опять же, не мудрствуя, просто скрипт. С папрметром -h как бы дает
+краткую спраку.
+
+<!--more-->
+
+
+
+```bash
+#!/bin/bash
+#
+# pastebash
+#
+# author: Livid
+# /posts/2009-10-07-%D0%B2%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0-%D0%B2-pastebin-%D0%B8%D0%B7-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B8.html
+#
+# Simple bash script to paste to pastebin.com.  Requires file,
+# and curl.
+# Based on lydgates apaste script
+# http://lydgate.nonlogic.org/archlinux/apaste.sh
+#
+
+#specify defaults here
+USER="Anonymous"
+TYPELIST="help"
+BASE=`basename $0`
+
+[ -e "`which curl`" ] || ( echo "Curl not found!"; exit 1)
+
+while getopts "u:t:h" opt; do
+ case $opt in
+       u) USER="$OPTARG";;
+        t)
+            TYPE="$OPTARG"
+         if [ "$TYPE" == "$TYPELIST" ]; then
+                echo "Type is one of:"
+             curl -s http://pastebin.com |
+             tr -d '\r\n' |
+                sed -r 's:.*((]+value="[^"]*">[^<]*)+).*:\1:;
+               s:]*>::g;
+              s:]+value="([^"]+)">([^<]+):\t\1 - \2\n:g' |
+               sort -u | grep -v -e "---------------"
+             exit 4
+         fi
+         ;;
+     ?|h)
+          echo -e "
+Usage: $BASE [-u User] [-t Type] [file|-]
+where User is an arbitrary string, default is '$USER'
+file is source file or - for stdin
+Type is one of regitered pastebin types. Run $BASE -t $TYPELIST to see full list
+By default, we attempt type autodetection based on 'file' output"
+            exit 3
+         ;;
+ esac
+done
+
+shift $(($OPTIND-1))
+
+[ "$TYPE" ] || case `file "$1"` in
+    *Bourne*)
+        TYPE="bash";;
+    *python*)
+        TYPE="python";;
+    *perl*)
+        TYPE="perl";;
+    *HTML*)
+        TYPE="html4strict";;
+    *)
+        TYPE="text";;
+esac
+
+DATA=`cat "$1"` || exit 2
+
+curl -d "format=$TYPE"
+     --data-urlencode "code2=$DATA"
+     -d "poster=$USER"
+     -d "expiry=expiry_day"
+     -d "paste=Send"
+     -i -s "http://pastebin.com/pastebin.php"
+     | grep 'Location'
+```
+
+
+GPLv3, если что.

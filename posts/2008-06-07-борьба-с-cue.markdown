@@ -1,0 +1,95 @@
+---
+author: Livid
+date: 2008-06-07 09:11:50+00:00
+title: Борьба с .cue
+wordpress_id: 9
+tags: BASh, Звук ,BASh, Звук
+...
+
+Столкнулся недавно с проблемой, а как порезать на отдельные flac'и
+ape/cue. Пришел к описаному ниже решению.
+
+
+<!--more-->
+
+
+
+Во-первых, понадобятся пакеты libjmac-java, cuetools, shntool
+
+Во-вторых, для удобвства я создал такой вот скриптик /usr/bin/jmac:
+
+```bash
+#!/bin/sh
+java -jar /usr/share/java/jmac.jar $1 "$2" "$3"
+```
+
+
+В наших целях использовать это можно так:
+
+```bash
+$ jmac d file.ape file.wav
+```
+
+
+Через некоторое время создстся file.wav, который уже теперь можно
+порезать в соответствии с индексом .cue:
+
+```bash
+$ cuebreakpoints "file.cue" | shnsplit -o flac "file.wav"
+```
+
+
+Я написал простенький скрипт cuesplit, который делает, то же самое,
+только пишется короче :)
+
+Чтобы сохранить теги, я использую
+
+```bash
+$ cuetag "file.cue" split-track*
+```
+
+
+Однако, если в имени file.cue есть пробел, то cuetag работать откажется.
+Приходится делать
+
+```bash
+$ cp "file.cue" 1.cue && cuetag "1.cue" split-track* && rm 1.cue
+```
+
+
+Возможно, вы еще хотите перименовать файлы в соответствии с тегами. Я
+для этого написал простенький скриптик flacrename:
+
+```bash
+#!/bin/bash
+
+FILE="$1"
+NEWNAME=`metaflac --show-tag=TRACKNUMBER $FILE | sed -e "s/TRACKNUMBER=//"`
+NEWNAME+=" - "
+NEWNAME+=`metaflac --show-tag=TITLE $FILE | sed -e "s/TITLE=//"`
+NEWNAME=`echo $NEWNAME | sed -e "s/\//_/"`
+echo $NEWNAME
+mv "$FILE" "$NEWNAME.flac"
+```
+
+
+Скачать:
+[flacrename](/files/flacrename.sh)
+
+После того как скрипт сделан, можно воспользоваться моей любимой
+утилитой:
+
+```bash
+$ find -name split-track\* -execdir ./flacrename \{\} \;
+```
+
+
+Вот, собственно, и все. Принципиально, можно сделать специальный скрипт
+для такого дела, но мне как-то лень :)
+
+Хотя подобные скрипты я где-то видел, но там использовались
+проприетарные библиотеки (libmac например), что не могло меня радовать.
+
+В принципе, shnsplit должен работать не только с wav-файлами, но я не
+проверял работоспособность. Описанный выше способ считаю более удобным
+:)

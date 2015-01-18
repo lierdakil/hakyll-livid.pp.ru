@@ -1,0 +1,13 @@
+$for(posts)$
+  <a href="$url$"><h2>$title$</h2></a>
+  <a href="$url$#disqus_thread" data-disqus-identifier="$disqusId$">Комментарии</a>
+  <div class="date">$date$</div>
+  <div class="teaser">
+    $if(teaser)$
+      $teaser$
+      <a href="$url$">Читать дальше...</a>
+    $else$
+      $body$
+    $endif$
+  </div>
+$endfor$

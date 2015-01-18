@@ -1,0 +1,25 @@
+---
+author: Livid
+date: 2009-02-27 13:39:58+00:00
+title: Список пользователей
+wordpress_id: 260
+...
+
+Мучаясь от тяжкого безделья, наткнулся на
+[обсуждение](http://community.livejournal.com/ru_linux/2086573.html) в
+LJ комьюнити ru\_linux
+
+Так вот, мой ответ на вопрос можно обнаружить в той же ветке, ничего
+особенного там нет. Тем не менее, однострочник получился полезный,
+поэтому, чтобы не забыть:
+
+```bash
+getent passwd | awk -F: "{ if (\$3 >= `grep -w UID_MIN /etc/login.defs | awk '{ print \$2; }'` && \$3 <= `grep -w UID_MAX /etc/login.defs | awk '{ print \$2; }'`) print \$1; }"
+```
+
+
+И чтобы записать в алиас:
+
+```bash
+alias lsusers='getent passwd | awk -F: "{ if (\$3 >= `grep -w UID_MIN /etc/login.defs | awk '\''{ print \$2; }'\''` && \$3 <= `grep -w UID_MAX /etc/login.defs | awk '\''{ print \$2; }'\''`) print \$1; }"'
+```

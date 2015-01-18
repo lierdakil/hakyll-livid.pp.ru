@@ -1,0 +1,52 @@
+---
+author: Livid
+date: 2009-12-27 04:38:20+00:00
+title: Новогодняя елка
+wordpress_id: 384
+tags: ascii, BASh, shell ,BASh, Праздники, Юмор
+...
+
+С наступающим, господа! В качестве новогоднего подарка я сделал ёлочку.
+Сама елочка может и не очень, но скрипт может представлять некий научный
+инетерс...)
+
+```bash
+#!/bin/bash
+
+TREE="\033[s
+           *
+          .^.
+         .-o-.
+        .-.-'-.
+       .-o .-'-.
+      .-.-' }{ -.
+     .- Y  X .-'-.
+    .- J  .-' * o-.
+   .-T .-' o   O  -.
+  .-.-'.-..-.O.-..--.
+  _ O o  |~~~|   (\(\
+ / /\\\\\\V \'''''/ =(*.*)=
+ \_|_|A  \___/   (v v) \033[u"
+
+while true; do
+  for i in `seq 1 7`; do
+     line=$((12-$i))
+        color=$((30+$i))
+       echo -en "$TREE" | sed "$line s:\.-':`echo -en "\033[${color}mo\033[0m-'"`:"
+       sleep 0.3
+      color=$(($color+1))
+        echo -en "$TREE" | sed "$line s:\.-':`echo -en ".\033[${color}m=\033[0m'"`:"
+       sleep 0.3
+      color=$(($color+1))
+        echo -en "$TREE" | sed "$line s:\.-':`echo -en ".-\033[${color}m*\033[0m"`:"
+       sleep 0.3
+  done
+done
+```
+
+
+
+Хауту по аски-кодам:
+[http://www.linuxselfhelp.com/...](http://www.linuxselfhelp.com/howtos/Bash-Prompt/Bash-Prompt-HOWTO-6.html)
+
+P.S. Сделал telnet-версию, livid.pp.ru:3333

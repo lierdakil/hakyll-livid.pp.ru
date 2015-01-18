@@ -1,0 +1,119 @@
+---
+author: Livid
+date: 2015-01-10 18:38:50+00:00
+title: XMonad и разные команды на одной клавише в зависимости от текущего layout
+wordpress_id: 701
+tags: Cheats, Haskell, tiling, X, XMonad ,Cheats, Soft
+...
+
+Последние дни играюсь с XMonad. Для разных целей пользуюсь разными
+движками. В частности, стандартными Tall и Full и дополнительно, скажем,
+MosaicAlt. Иногда оказывается удобно сбросить настройки движка на
+умолчания, однако делается это по-разному. Возникает вопрос, можно ли
+эти разные действия привязать на одно сочетание клавиш и вызывать нужное
+в зависимости от текущего движка? Оказывается, можно, хотя гугл рецептов
+почему-то не предлагает.
+
+<!--more-->
+
+
+В случае стандартных движков, умолчальное сочетание клавиш
+modm+shift+space делает что-то в таком духе:
+
+```haskell
+setLayout (XMonad.layoutHook conf)
+```
+
+
+В случае же MosaicAlt, сброс производится как-то так:
+
+```haskell
+sendMessage resetAlt
+```
+
+
+
+Определить название текущего движка можно при помощи такой конструкции:
+
+```haskell
+withWindowSet $ description . W.layout . W.workspace . W.current
+```
+
+где W -- это XMonad.StackSet:
+
+```haskell
+import qualified XMonad.StackSet as W
+```
+
+
+current получает текущий стек, workspace -- текущее рабочее окружение
+(ака виртуальный рабочий стол), layout -- выбранный в данном рабочем
+окружении движок. description получает строку-описание движка.
+withWindowSet вызывает свой аргумент, передавая ему активный StackSet.
+
+На основе имени текущего движка, нам нужно выбрать соответствующую
+команду. Используем для этого pattern matching:
+
+```haskell
+let
+    --  Reset MosaicAlt layout to default
+    bindkey "MosaicAlt" = sendMessage resetAlt
+    --  Reset the layouts on the current workspace to default
+    bindkey layoutName  = setLayout (XMonad.layoutHook conf)
+in withWindowSet $ bindkey . description . W.layout . W.workspace . W.current)
+```
+
+
+
+layoutName совпадает со всеми шаблонами, кроме определенных ранее (в
+нашем случае "MosaicAlt"). Те, кто знают haskell, возможно спросят -- а
+почему я обозначил эту переменную, а не использовал "пустышку" \_? Дело
+в том, что setLayout layoutHook сбрасывает не только настройки движков,
+но и устанавливает умолчальный движок. Чтобы с этим бороться, я
+предлагаю просто после сброса настроек восстанавливать выбранный
+движок.
+
+Для этого, во-первых, нужно заменить стандартный оператор выбора движка
+(|||) на оператор из XMonad.Layout.LayoutCombinators:
+
+```haskell
+import XMonad hiding ( (|||) )
+import XMonad.Layout.LayoutCombinators
+```
+
+
+Затем мы можем использовать сообщение JumpToLayout String все из того же
+LayoutCombinators:
+
+```haskell
+sendMessage (LC.JumpToLayout layoutName)
+```
+
+
+Чтобы последовательно выполнить действия в монаде IO (которая обернута
+внутри монады X a, которую возвращают едва ли не все команды XMonad) --
+или вообще говоря любой другой -- можно использовать оператор
+"далее" \>\>, который по сути выбрасывает результат правого вычисления в
+монаде (однако производит его) и возвращает результат левого.
+
+Окончательно получаем
+
+```haskell
+let
+    --  Reset MosaicAlt layout to default
+    bindkey "MosaicAlt" = sendMessage resetAlt
+    --  Reset the layouts on the current workspace to default
+    bindkey layoutName  = setLayout (XMonad.layoutHook conf) >> sendMessage (JumpToLayout layoutName)
+in withWindowSet $ bindkey . description . W.layout . W.workspace . W.current)
+```
+
+
+
+Всю эту конструкцию можно привязать на нажатие клавиши (например, как
+второй аргумент пары клавиша-команда в XConfig.keys)
+
+Эту же методику можно применить и для других привязанных к движку
+команд.
+
+P.S. Если это можно сделать проще, милости прошу в комментарии. Я пока
+не могу похвастаться глубоким знанием XMonad.

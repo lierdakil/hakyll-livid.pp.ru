@@ -1,0 +1,14 @@
+---
+author: Livid
+date: 2008-08-26 20:52:37+00:00
+title: Магия консольных одностроковых скриптов
+wordpress_id: 59
+tags: BASh ,BASh, Cheats
+...
+
+На [linux.org.ru](http://linux.org.ru) недавно
+[проскочила](http://www.linux.org.ru/jump-message.jsp?msgid=3045131)
+ссылка на эту весьма занимательную статью.
+Поскольку у меня были близкие по тематике посты, я решил выложить
+ссылку.
+<http://rus-linux.net/lib.php?name=MyLDP/consol/cli-magic.html>

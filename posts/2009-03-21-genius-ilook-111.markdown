@@ -1,0 +1,11 @@
+---
+author: Livid
+date: 2009-03-21 22:51:10+00:00
+title: Genius iLook 111
+wordpress_id: 276
+tags: iLook, kernel, webcam ,Gentoo, kernel, Железо, Праздники, patch
+...
+
+А мой [патч](/posts/2009-01-06-genius-i-look-111-%D0%B8-gspcav2.html)-таки
+[добрался](https://bugs.gentoo.org/show_bug.cgi?id=256002) в ядро вообще
+и ядро Gentoo в частности.

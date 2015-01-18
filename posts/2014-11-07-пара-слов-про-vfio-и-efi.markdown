@@ -1,0 +1,70 @@
+---
+author: Livid
+date: 2014-11-07 23:24:25+00:00
+title: Пара слов про VFIO и EFI
+wordpress_id: 686
+tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows ,Gentoo, kernel, patch
+...
+
+В [предыдущем
+посте](/posts/2014-09-06-%D0%BF%D1%80%D0%BE%D0%B1%D1%80%D0%BE%D1%81-%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE%D0%BA%D0%B0%D1%80%D1%82%D1%8B-%D0%B2-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%83%D1%8E-%D0%BC%D0%B0%D1%88.html "Проброс видеокарты в виртуальную машину средствами KVM VFIO")
+на тему я довольно пространно описывал, как решить проблемы арбитрации
+VGA, патчил ядро и т.д. и т.п. Надо сказать, что при использовании
+Windows 8/8.1 (и возможно Windows Vista/7, если удастся поставить ее в
+режиме EFI -- мне не удалось) эту проблему можно обойти. Смысл в том,
+что при загрузке в режиме EFI, интерфейс VGA вообще не используется.
+Как достичь такого эффекта? Довольно просто.
+
+<!--more-->
+
+
+Во-первых, нужен EFI-образ загрузки для qemu (по привычке чуть не назвал
+его биосом). Взять готовую сборку можно, например,
+[здесь](https://www.kraxel.org/repos/jenkins/edk2/) (нужен
+edk2.git-ovmf-x64-\*.noarch.rpm). Если берете сборку по ссылке, из rpm
+нужен только файл OVMF-pure-efi.fd -- его надо распаковать в удобное
+место (например в /opt/ или /usr/local/lib или даже в /root).
+Получив вожделенный образ, его можно использовать вместо биоса, задавая
+опцию следующего вида:
+
+    -drive if=pflash,format=raw,readonly,file=/path/to/OVMF-pure-efi.fd
+
+вместо опции `-bios ...`. Здесь я злонамеренно опускаю подробности о
+сохранении настроек EFI -- они есть, например,
+[здесь](http://vfio.blogspot.ru/2014/09/ovmf-split-image-support.html "VFIO tips and tricks: OVMF split image support") --
+поскольку в типичном случае это попросту не нужно.
+Во-вторых, придется отказаться от нового q35 -- он пока не особо дружит
+с OVMF-загрузчиком. Соответственно диски цепляются тоже "по-старинке",
+одной опцией drive без подключения к шине контроллера.
+Графические (и любые другие PCI/PCIe устройства) пробрасываются без
+дополнительных опций в режиме vfio-pci (впрочем в случае карт NVidia
+может понадобиться x-vga=on)
+В результате конфиг может выглядеть примерно следующим образом:
+
+```bash
+qemu-system-x86_64 -enable-kvm -m 3000 -cpu host
+    -smp 6,sockets=1,cores=6,threads=1
+    -drive if=pflash,format=raw,readonly,file=/root/OVMF-pure-efi.fd
+    -drive file=/home/libvirt/Windows-kvm-efi.img,format=raw,media=disk
+    -drive file=/home/libvirt/Windows-2.img,format=raw,media=disk
+    -drive file=/home/dist/Windows8.1.iso,format=raw,media=cdrom
+    -device vfio-pci,host=01:00.0
+    -device vfio-pci,host=01:00.1
+    -net nic -net bridge,br=xenbr0
+    -spice port=5900,addr=127.0.0.1,disable-ticketing
+    -monitor telnet:127.0.0.1:12997,server,nowait,ipv4
+    -rtc base=localtime
+```
+
+
+
+Надо иметь ввиду, что беспроблемно пробрасываются только радеоны. В
+"зеленом лагере" (i.e. NVidia) новые драйвера (с 337.88) отключаются,
+если обнаруживают, что выполняются в виртуализованном окружении. Их,
+конечно, можно обмануть. Но это выходит за рамки заметки.
+
+Ссылки по теме:
+[VFIO tips and tricks: Primary graphics assignment without
+VGA](http://vfio.blogspot.ru/2014/08/primary-graphics-assignment-without-vga.html)
+[VFIO tips and tricks: VFIO+VGA
+FAQ](http://vfio.blogspot.ru/2014/08/vfiovga-faq.html)

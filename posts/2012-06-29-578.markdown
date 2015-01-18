@@ -1,0 +1,30 @@
+---
+author: Livid
+date: 2012-06-29 15:50:48+00:00
+title: Еще раз про Unifying
+wordpress_id: 578
+tags: kernel, logitech, unifying ,BASh, Cheats, kernel, Soft, Железо
+...
+
+Под катом маленькое дополнение к [предыдущему
+посту](/posts/2012-06-25-%D0%BF%D0%B5%D0%B9%D1%80%D0%B8%D0%BD%D0%B3-logitech-unifying-%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2-%D0%B2-linux.html) -- скриптик на bash, обеспечивающий
+автоматический поиск всех приемников Logitech Unifying и перевод их в
+режим пейринга. Для подавляющего большинства ситуаций (мышь, клавиатура
+на одном приемнике) это то, что надо.
+
+<!--more-->
+
+
+Переменная UNIRAW содержит полный путь к программе [из предыдущего
+поста](/posts/2012-06-25-%D0%BF%D0%B5%D0%B9%D1%80%D0%B8%D0%BD%D0%B3-logitech-unifying-%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2-%D0%B2-linux.html).
+
+```bash
+#!/bin/bash
+UNIRAW="/usr/local/sbin/unifying-raw"
+
+grep -H 'NAME=Logitech USB Receiver' /sys/class/hidraw/hidraw?/device/uevent | cut -f1-5 -d'/' |
+while read syshr; do
+   devname=`grep -H DEVNAME "$syshr/uevent" | cut -f2 -d'='`
+  [ -n "$devname" ] && "$UNIRAW" "/dev/$devname"
+done
+```
