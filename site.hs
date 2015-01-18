@@ -3,7 +3,6 @@
 import           Data.Monoid (mappend)
 import           Control.Monad
 import           Data.Maybe
-import           Network.HTTP
 import           Hakyll
 -- import           Data.List
 import           System.FilePath
@@ -82,15 +81,10 @@ main = hakyllWith config $ do
 
     match "posts/*" $ do
         route   $ setExtension "html"
-        compile $ do
-          identifier <- getUnderlying
-          route' <- getRoute identifier
-          let route1 = fromMaybe "undefined" route'
-          let postCtx' = constField "url" (replaceAll "%2F" (const "/") $ urlEncode route1) `mappend`
-                          postCtx
+        compile $
           pandocCompiler
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx'
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
