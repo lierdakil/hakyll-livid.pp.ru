@@ -66,6 +66,15 @@ div#header #navigation a:active {
   background-color: #DADADA;
 }
 
+div#content a.archive {
+  font-size: 56px;
+  font-weight: bold;
+}
+
+div#content a.archive.newer {
+  float: right;
+}
+
 div#content {
   padding-right: 30px;
   margin-right: 30%;

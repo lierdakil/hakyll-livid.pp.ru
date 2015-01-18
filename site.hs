@@ -24,7 +24,8 @@ main = hakyllWith config $ do
 
     let tagCloud = tagCloudField "tagCloud" 80 200 tags
     let
-        list !!? i | i < length list = Just $ list !! i
+        list !!? i | i < length list,
+                     not.null $ list !! i  = Just $ list !! i
                    | otherwise = Nothing
         navigationField = functionField "navigation" navigationLink
         navigationLink args item = do
@@ -32,12 +33,14 @@ main = hakyllWith config $ do
                       text = args !! 1
                       pattern = fromMaybe (fromList [identifier]) $
                                     liftM fromGlob $ args !!? 2
+                      classes = fromMaybe "" $ args !!? 3
                       identifier = fromFilePath filePath
-                      cls =
+                      cls = "class=\"" ++(
                             if matches pattern (itemIdentifier item) then
-                              "class=\"active\""
+                              "active"
                             else
                               ""
+                            )++ classes ++ "\""
                   Just argUrl <- getRoute identifier
                   return $
                       "<a href=\"/"++argUrl++"\""++
