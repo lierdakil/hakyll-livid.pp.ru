@@ -278,3 +278,4 @@ config = defaultConfiguration
 * <http://jaspervdj.be/hakyll/reference/index.html>
 * <http://jaspervdj.be/hakyll/tutorials.html>
 * <http://habrahabr.ru/post/175877/>
+* <http://yannesposito.com/Scratch/en/blog/Hakyll-setup/>
