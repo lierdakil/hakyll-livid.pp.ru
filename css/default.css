@@ -66,6 +66,14 @@ div#header #navigation a:active {
   background-color: #DADADA;
 }
 
+div.date {
+  float: right;
+}
+
+h2.post-list-title {
+  margin-bottom: 0;
+}
+
 div#content a.archive {
   font-size: 56px;
   font-weight: bold;
