@@ -22,7 +22,6 @@ main = hakyllWith config $ do
     -- tag pages
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
-    let tagCloud = tagCloudField "tagCloud" 80 200 tags
     let
         list !!? i | i < length list,
                      not.null $ list !! i  = Just $ list !! i
@@ -46,15 +45,15 @@ main = hakyllWith config $ do
                       "<a href=\"/"++argUrl++"\""++
                       cls ++
                       ">"++ text ++"</a>"
-
-    let myDefaultContext =
-                tagCloud        `mappend`
-                navigationField `mappend`
+        myDefaultContext =
+                tagCloudField "tagCloud" 80 200 tags `mappend`
+                navigationField                      `mappend`
                 defaultContext
         postCtx =
                 dateField "date" "%B %e, %Y"    `mappend`
                 teaserField "teaser" "content"  `mappend`
                 field "disqusId" disqusId       `mappend`
+                tagsField "tags" tags           `mappend`
                 myDefaultContext
                 where
                   disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
