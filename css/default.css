@@ -26,6 +26,13 @@ div#logo a {
     font-size: 26px;
     font-weight: bold;
     text-decoration: none;
+    position: absolute;
+    height: 40px;
+    top: 10px;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    padding: 5px 10px 0px 10px;
+    margin-left: -40px;
 }
 
 div#header #navigation {
