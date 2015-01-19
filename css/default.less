@@ -1,6 +1,6 @@
 body {
   color: black;
-  font-size: 16px;
+  font-size: 1.2rem;
   margin: 0px auto 0px auto;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   background: #7A7A7A;
@@ -29,7 +29,7 @@ div#header {
           padding: 10px;
           margin: 0px;
           color: #6A6A6A;
-          font-size: 12px;
+          font-size: 1.2rem;
           font-weight: bold;
           text-decoration: none;
           text-transform: uppercase;
@@ -46,7 +46,7 @@ div#header {
 
 div#logo a {
   color: #dd3333;
-  font-size: 26px;
+  font-size: 1.7rem;
   font-weight: bold;
   text-decoration: none;
   position: absolute;
@@ -63,7 +63,12 @@ div#logo a {
 div#content {
   padding-right: 30px;
   margin-right: 30%;
-  @media (max-width:@sidebar-shift-width){
+  @media (max-width:@sidebar-shift-width) or (orientation: portrait){
+    clear: both;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  @media (orientation: portrait){
     clear: both;
     margin-right: 0;
     padding-right: 0;
@@ -72,18 +77,18 @@ div#content {
     float: right;
   }
   h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
     color: #aa0000;
   }
   h2 {
-    font-size: 20px;
+    font-size: 1.3rem;
     &.post-list-title {
       margin-bottom: 0;
     }
   }
   div.info {
     color: #555;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-style: italic;
   }
   a {
@@ -93,7 +98,7 @@ div#content {
       color: #dd3333;
     }
     &.archive {
-      font-size: 56px;
+      font-size: 4rem;
       font-weight: bold;
       &.newer {
         float: right;
@@ -107,6 +112,9 @@ div#content {
     code {
       border:none;
       background-color: inherit;
+    }
+    @media (orientation: portrait) and (max-device-width:400px){
+      font-size: 3rem;
     }
     .sourceCode .kw { color: #268BD2; }
     .sourceCode .dt { color: #268BD2; }
@@ -137,10 +145,16 @@ div.sidebar {
     @media (max-width:@sidebar-shift-width){
       display: none;
     }
+    @media (orientation: portrait) {
+      display: none;
+    }
   }
   &#sidebar2 {
     display: none;
     @media (max-width:@sidebar-shift-width){
+      display: block;
+    }
+    @media (orientation: portrait) {
       display: block;
     }
   }
@@ -153,7 +167,7 @@ div.sidebar {
   }
   h1 {
     text-transform: uppercase;
-    font-size: medium;
+    font-size: 1.5rem;
     color: #ADADAD
   }
 }
@@ -161,7 +175,7 @@ div.sidebar {
 div#footer {
   border-top: solid 2px black;
   color: #555;
-  font-size: 12px;
+  font-size: 0.75rem;
   margin-top: 30px;
   padding: 12px 0px 12px 0px;
   text-align: right;
