@@ -182,4 +182,7 @@ myFeedConfiguration = FeedConfiguration
 
 config :: Configuration
 config = defaultConfiguration
-  {   deployCommand = "rsync -avz -e ssh ./_site/ solar:/var/www/livid.pp.ru/hakyll"}
+  { deployCommand = makeDeployCommand hostlist }
+  where
+    makeDeployCommand = foldl ((.(++"; ")).(++)) "" . map ("rsync -avz -e ssh ./_site/ "++)
+    hostlist = ["solar:/var/www/livid.pp.ru/hakyll/", "vps.livid.pp.ru:/var/www/"]
