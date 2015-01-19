@@ -16,10 +16,22 @@ main = hakyllWith config $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/*" $ do
+    match "css/*.less" $ do
         route   $ setExtension "css"
         compile $ liftM (fmap compressCss) $ getResourceString >>=
                   withItemBody (unixFilter "lessc" ["-"])
+
+    match "css/*.min.css" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match "css/*.css.map" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match "fonts/*" $ do
+        route   idRoute
+        compile copyFileCompiler
 
     -- tag pages
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
@@ -44,9 +56,8 @@ main = hakyllWith config $ do
                             )++ classes ++ "\""
                   Just argUrl <- getRoute identifier
                   return $
-                      "<a href=\"/"++argUrl++"\""++
-                      cls ++
-                      ">"++ text ++"</a>"
+                      "<li "++cls++"><a href=\"/"++argUrl++"\">"++
+                      text ++"</a></li>"
         myDefaultContext =
                 tagCloudField "tagCloud" 80 200 tags `mappend`
                 navigationField                      `mappend`
@@ -85,7 +96,7 @@ main = hakyllWith config $ do
     tagsRules tags $ \tag pattern -> do
       let pagePath page | page == 1 = fromCapture "tags/*.html" tag
                         | otherwise = fromFilePath $ "tags/"++tag++"/page/"++show (page::PageNumber)++".html"
-      tagsPaginate <- buildPaginateWith (return.paginateEvery postsPerPage.reverse) pattern pagePath
+      tagsPaginate <- buildPaginateWith (liftM (paginateEvery postsPerPage).sortRecentFirst) pattern pagePath
       let title = "Посты с тегом " ++ tag
 
       paginateRules tagsPaginate $ \pageNum pattern' -> do
@@ -120,41 +131,27 @@ main = hakyllWith config $ do
             >>= relativizeUrls
 
     -- archive pages
-    let pagePath page = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
-    archivePaginate <- buildPaginateWith (return.paginateEvery postsPerPage.drop postsPerPage.reverse) "posts/*" pagePath
+    let pagePath page | page==1   = fromFilePath   "index.html"
+                      | otherwise = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
+    archivePaginate <- buildPaginateWith (liftM (paginateEvery postsPerPage).sortRecentFirst) "posts/*" pagePath
     paginateRules archivePaginate $ \pageNum pattern -> do
         route idRoute
         compile $ do
-            let posts =
+            let
+                title | pageNum==1 = "Главная"
+                      | otherwise  = "Архив"
+                posts =
                   loadAllSnapshots pattern "content" >>=
                   recentFirst
                 archiveCtx =
                   listField "posts" postCtx posts     `mappend`
-                  constField "title" "Архив"          `mappend`
+                  constField "title" title            `mappend`
                   paginateContext archivePaginate pageNum `mappend`
-                  constField "previousPageUrl" "/"         `mappend`
                   myDefaultContext
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-                >>= relativizeUrls
-
-    match "index.html" $ do
-        route idRoute
-        compile $ do
-            let posts =
-                  liftM (take postsPerPage) $
-                  loadAllSnapshots "posts/*" "content" >>=
-                  recentFirst
-                indexCtx =
-                  listField "posts" postCtx posts    `mappend`
-                  constField "title" "Главная"       `mappend`
-                  myDefaultContext
-
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler

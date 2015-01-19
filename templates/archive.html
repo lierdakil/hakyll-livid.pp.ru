@@ -1,7 +1,21 @@
 $partial("templates/post-list.html")$
-$if(nextPageUrl)$
-<a href="$nextPageUrl$" class="archive older">←</a>
-$endif$
-$if(previousPageUrl)$
-<a href="$previousPageUrl$" class="archive newer">→</a>
-$endif$
+<div class="row" id="pagination">
+  <div class="col-xs-6">
+    $if(nextPageUrl)$
+    <a href="$nextPageUrl$" class="archive older">
+      <button type="button" class="btn btn-default btn-block">
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+      </button>
+    </a>
+    $endif$
+  </div>
+  <div class="col-xs-6 archive newer">
+    $if(previousPageUrl)$
+    <a href="$previousPageUrl$" class="archive newer">
+      <button type="button" class="btn btn-default btn-block">
+        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+      </button>
+    </a>
+    $endif$
+  </div>
+</div>

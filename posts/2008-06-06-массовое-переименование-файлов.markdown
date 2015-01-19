@@ -1,6 +1,6 @@
 ---
 author: Livid
-date: 2008-06-06 15:12:06+00:00
+published: 2008-06-06 15:12:06
 title: Массовое переименование файлов
 wordpress_id: 5
 tags: BASh, Ubuntu ,BASh, Ubuntu

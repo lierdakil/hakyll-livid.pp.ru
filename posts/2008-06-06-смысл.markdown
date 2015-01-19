@@ -1,6 +1,6 @@
 ---
 author: Livid
-date: 2008-06-06 11:21:01+00:00
+published: 2008-06-06 11:21:01
 title: Смысл?
 wordpress_id: 3
 tags: Сайт ,Сайт

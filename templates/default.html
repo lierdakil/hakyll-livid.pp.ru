@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html lang="ru">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Красноглазый Блог - $title$</title>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/default.css" />
         <link rel="alternate" type="application/rss+xml" title="Красноглазый блог (RSS)" href="/rss.xml">
         <link rel="alternate" type="application/atom+xml" title="Красноглазый блог (Atom)" href="/atom.xml">
@@ -19,30 +21,34 @@
         </script>
     </head>
     <body>
-      <div id="page">
-        <div id="header">
-            <div id="logo">
-                <a href="/">Красноглазый Блог</a>
-            </div>
-            <div id="navigation">
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">Красноглазый Блог</a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
               $navigation("index.html","Главная")$
               $navigation("static/about.markdown","О сайте")$
               $navigation("static/author.markdown","Об авторе")$
-              $if(navigation("archive/page/1.html",""))$
-              $navigation("archive/page/1.html","Архив","archive/page/*")$
+              $if(navigation("archive/page/2.html",""))$
+              $navigation("archive/page/2.html","Архив","archive/page/*")$
               $endif$
-            </div>
+            </ul>
+          </div>
         </div>
-        <div id="sidebar" class="sidebar">
-          $partial("templates/sidebar.html")$
+      </nav>
+      <div class="container" id="page">
+        <div class="row" id="content">
+          <div id="body" class="col-xs-12 col-md-8">
+              $body$
+          </div>
+          <div id="sidebar" class="col-xs-12 col-md-4">
+            $partial("templates/sidebar.html")$
+          </div>
         </div>
-        <div id="content">
-            $body$
-        </div>
-        <div id="sidebar2" class="sidebar">
-          $partial("templates/sidebar.html")$
-        </div>
-        <div id="footer">
+        <div class="row">
+          <div class="col-md-12" id="footer">
             Сайт сгенерирован движком
             <a href="http://jaspervdj.be/hakyll">Hakyll</a><br/>
             Исходники сайта доступны на <a href="https://github.com/lierdakil/hakyll-livid.pp.ru">GitHub</a><br/>
@@ -50,6 +56,7 @@
             «<span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Красноглазый блог</span>» ©<a xmlns:cc="http://creativecommons.org/ns#" href="http://livid.pp.ru" property="cc:attributionName" rel="cc:attributionURL">Nikolay "Livid" Yakimov</a>,<br/>
             публикуется на условиях <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">лицензии Creative Commons «Attribution-ShareAlike» («Атрибуция — На тех же условиях») 4.0 Всемирная</a>.<br />
             Разрешения, выходящие за рамки данной лицензии, могут быть доступны на странице <a xmlns:cc="http://creativecommons.org/ns#" href="http://livid.pp.ru" rel="cc:morePermissions">http://livid.pp.ru</a>.
+          </div>
         </div>
       </div>
       <script type="text/javascript">

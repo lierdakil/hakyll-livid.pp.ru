@@ -1,6 +1,6 @@
 ---
 author: Livid
-date: 2008-06-06 20:51:51+00:00
+published: 2008-06-06 20:51:51
 title: PulseAudio
 wordpress_id: 8
 tags: Debian, PulseAudio ,Debian, Звук

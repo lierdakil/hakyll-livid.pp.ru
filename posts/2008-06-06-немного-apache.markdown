@@ -1,6 +1,6 @@
 ---
 author: Livid
-date: 2008-06-06 15:00:29+00:00
+published: 2008-06-06 15:00:29
 title: Немного apache
 wordpress_id: 4
 tags: Apache, BASh, Debian ,Apache, Debian

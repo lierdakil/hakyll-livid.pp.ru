@@ -1,6 +1,6 @@
 ---
 author: Livid
-date: 2008-06-06 19:09:35+00:00
+published: 2008-06-06 19:09:35
 title: Звук на Asus Z99L
 wordpress_id: 7
 tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
@@ -54,14 +54,14 @@ tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
 
             $ tar jxf alsa-driver* && tar jxf alsa-lib* && tar jxf alsa-utils*
 
-        
+
 
     3.  Собрать - для этого, как и для любой сборки из исходников, нужен
         мета-пакет build-essential:
 
             $ sudo apt-get install build-essential
 
-        
+
 
         1.  alsa-driver
 
@@ -70,37 +70,37 @@ tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
                 $ make
                 $ sudo make install
 
-            
+
             Здесь совершенно точно понадобится пакет linux-headers для
             вашего ядра. Если его нет, то нужно выполнить
 
                 $ sudo apt-get install linux-headers-$(uname -r)
 
-            
+
 
         2.  alsa-lib
 
                 $ cd ../alsa-lib*
                 $ ./configure && make && sudo make install
 
-            
+
             Для этого пакета нужны заголовки ncurses:
 
                 $ sudo apt-get install libncurses5-dev
 
-            
+
 
         3.  alsa-utils
 
                 $ cd ../alsa-utils*
                 $ ./configure && make && sudo make install
 
-            
+
             Для этого пакета нужен gettext:
 
                 $ sudo apt-get install gettext
 
-            
+
             Однако нужен он для переводов (японский и русский), поэтому
             я просто отредактировал первую строчку alsaconf/po/Makefile,
             убрав из первой строчки все после знака "=". Конечно,
@@ -111,11 +111,11 @@ tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
                 $ touch alsaconf/po/t-ja.gmo
                 $ touch alsaconf/po/t-ru.gmo
 
-            
 
-        
 
-    
+
+
+
 2.  Создать файл /etc/modutils/alsa (имя не столь важно, на самом деле)
     следующего содержания (\$ sudo nano /etc/modules/alsa)
 
@@ -133,7 +133,7 @@ tags: Ubuntu, Звук, Ноутбуки ,Asus Z99L, Ubuntu, Звук
         alias sound-service-0-8 snd-seq-oss
         alias sound-service-0-12 snd-pcm-oss
 
-    
+
 
 3.  Перезагрузиться
 4.  В alsamixer выставить нужные каналы на максимум и отключить стоящий
