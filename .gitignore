@@ -1,5 +1,6 @@
 _cache
 _site
+_site.*
 site
 rebuild
 watch
