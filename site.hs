@@ -95,8 +95,11 @@ main = hakyllWith config $ do
     let postsPerPage = 10
     tagsRules tags $ \tag pattern -> do
       let pagePath page | page == 1 = fromCapture "tags/*.html" tag
-                        | otherwise = fromFilePath $ "tags/"++tag++"/page/"++show (page::PageNumber)++".html"
-      tagsPaginate <- buildPaginateWith (liftM (paginateEvery postsPerPage).sortRecentFirst) pattern pagePath
+                        | otherwise = fromFilePath $ "tags/"++tag++"/page/"++
+                                                show (page::PageNumber)++".html"
+      tagsPaginate <- buildPaginateWith
+                            (liftM (paginateEvery postsPerPage).sortRecentFirst)
+                            pattern pagePath
       let title = "Посты с тегом " ++ tag
 
       paginateRules tagsPaginate $ \pageNum pattern' -> do
@@ -132,8 +135,11 @@ main = hakyllWith config $ do
 
     -- archive pages
     let pagePath page | page==1   = fromFilePath   "index.html"
-                      | otherwise = fromFilePath $ "archive/page/"++show (page::PageNumber)++".html"
-    archivePaginate <- buildPaginateWith (liftM (paginateEvery postsPerPage).sortRecentFirst) "posts/*" pagePath
+                      | otherwise = fromFilePath $ "archive/page/"++
+                                                show (page::PageNumber)++".html"
+    archivePaginate <- buildPaginateWith
+                            (liftM (paginateEvery postsPerPage).sortRecentFirst)
+                            "posts/*" pagePath
     paginateRules archivePaginate $ \pageNum pattern -> do
         route idRoute
         compile $ do
@@ -184,5 +190,9 @@ config :: Configuration
 config = defaultConfiguration
   { deployCommand = makeDeployCommand hostlist }
   where
-    makeDeployCommand = foldl ((.(++"; ")).(++)) "" . map ("rsync -avz -e ssh ./_site/ "++)
-    hostlist = ["solar:/var/www/livid.pp.ru/hakyll/", "vps.livid.pp.ru:/var/www/"]
+    makeDeployCommand = foldl ((.(++"; ")).(++)) ""
+                                        . map ("rsync -avz -e ssh ./_site/ "++)
+    hostlist = [
+                "solar:/var/www/livid.pp.ru/hakyll/",
+                "vps.livid.pp.ru:/var/www/"
+               ]
