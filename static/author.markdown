@@ -1,9 +1,6 @@
 ---
-author: admin
-comments: false
-date: 2008-06-06 15:31:03+00:00
+author: Livid
 title: Об авторе
-wordpress_id: 6
 ---
 
 Я закончил физический факультет МГУ им. М.В. Ломоносова, сейчас работаю
@@ -39,3 +36,11 @@ Assembler, HTML, терпимо -- с Python и Haskell.
 
 В общем, чтобы ваши демоны не падали в кору, а
 сорцы компилились с первого раза.
+
+Меня можно найти в:
+
+* [Facebook](http://facebook.com/lierdakil)
+* [VKontakte](http://vk.com/lierdakil)
+* [Twitter](http://twitter.com/lierdakil)
+* [LiveJournal](http://lierdakil.livejournal.com)
+* Jabber: root＠livid.pp.ru
