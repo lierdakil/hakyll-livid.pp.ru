@@ -43,6 +43,21 @@
               $navigation("archive/page/2.html","Архив","archive/page/*")$
               $endif$
             </ul>
+            <div id="google-search" class="col-xs-12 col-sm-4 navbar-right">
+              <script>
+                (function() {
+                  var cx = '012608259635028981684:bhhssxo-oys';
+                  var gcse = document.createElement('script');
+                  gcse.type = 'text/javascript';
+                  gcse.async = true;
+                  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                      '//www.google.com/cse/cse.js?cx=' + cx;
+                  var s = document.getElementsByTagName('script')[0];
+                  s.parentNode.insertBefore(gcse, s);
+                })();
+              </script>
+              <gcse:searchbox-only></gcse:searchbox-only>
+            </div>
           </div>
         </div>
       </nav>

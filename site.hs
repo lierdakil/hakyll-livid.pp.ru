@@ -95,6 +95,14 @@ main = hakyllWith config $ do
                 myDefaultContext
                 where
                   disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
+        myDCWithTitle title = constField "title" title `mappend` myDefaultContext
+
+    match "search.html" $ do
+        route idRoute
+        compile $ getResourceBody
+          >>= loadAndApplyTemplate "templates/default.html"
+                                   (myDCWithTitle "Результаты поиска")
+          >>= relativizeUrls
 
     let postsPerPage = 10
     tagsRules tags $ \tag pattern -> do
