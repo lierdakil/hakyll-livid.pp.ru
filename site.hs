@@ -33,6 +33,10 @@ main = hakyllWith config $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "js/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     -- tag pages
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
