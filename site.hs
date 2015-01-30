@@ -8,7 +8,6 @@ import           System.FilePath
 import           System.Locale
 import           Data.List
 import           Data.Function    (on)
-import           Control.Arrow    ((&&&))
 import           Data.Time.Format (formatTime)
 import           Text.Blaze.Html                 (toHtml, toValue, (!))
 import           Text.Blaze.Html.Renderer.String (renderHtml)
@@ -217,7 +216,7 @@ main = hakyllWith config $ do
                     years = reverse $ zip getYears getMonths
                     showYear (year, months') = renderHtml (H.h1 $ toHtml year) ++ renderHtml (H.ul $ showMonths months')
                     showMonths = foldl (\acc x -> acc >> showMonth x) ""
-                    showMonth (month,url,count) = H.li $ H.a ! A.href (toValue url) $ toHtml $ monthNames !! month ++ "(" ++ count ++ ")"
+                    showMonth (month,url,count) = H.li $ H.a ! A.href (toValue url) $ toHtml $ monthNames !! month ++ " (" ++ count ++ ")"
                     monthNames :: [String]
                     monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"]
                 in
