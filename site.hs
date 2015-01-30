@@ -56,7 +56,7 @@ main = hakyllWith config $ do
                   let filePath = head args
                       text = args !! 1
                       pattern = fromMaybe (fromList [identifier]) $
-                                    liftM fromGlob $ args !!? 2
+                                    liftM fromRegex $ args !!? 2
                       classes = fromMaybe "" $ args !!? 3
                       identifier = fromFilePath filePath
                       cls = "class=\"" ++(
