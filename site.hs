@@ -2,11 +2,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Control.Monad
 import           Data.Maybe
-import           Data.Monoid     (mappend)
+import           Data.Monoid      (mappend)
 import           Hakyll
--- import           Data.List
 import           System.FilePath
 import           System.Locale
+import           Data.List
+import           Data.Function    (on)
+import           Control.Arrow    ((&&&))
+import           Data.Time.Format (formatTime)
+import           Text.Blaze.Html                 (toHtml, toValue, (!))
+import           Text.Blaze.Html.Renderer.String (renderHtml)
+import qualified Text.Blaze.Html5                as H
+import qualified Text.Blaze.Html5.Attributes     as A
 
 
 --------------------------------------------------------------------------------
@@ -95,6 +102,8 @@ main = hakyllWith config $ do
                 myDefaultContext
                 where
                   disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
+        recentSnapshots pattern = loadAllSnapshots pattern "content" >>= recentFirst
+        postsField = listField "posts" postCtx . recentSnapshots
 
     let postsPerPage = 10
     tagsRules tags $ \tag pattern -> do
@@ -109,10 +118,8 @@ main = hakyllWith config $ do
       paginateRules tagsPaginate $ \pageNum pattern' -> do
           route idRoute
           compile $ do
-            let posts = loadAllSnapshots pattern' "content" >>=
-                        recentFirst
             let ctx = constField "title" title `mappend`
-                      listField "posts" postCtx posts `mappend`
+                      postsField pattern'      `mappend`
                       paginateContext tagsPaginate pageNum `mappend`
                       myDefaultContext
             makeItem ""
@@ -154,11 +161,8 @@ main = hakyllWith config $ do
             let
                 title | pageNum==1 = "Главная"
                       | otherwise  = "Архив"
-                posts =
-                  loadAllSnapshots pattern "content" >>=
-                  recentFirst
                 archiveCtx =
-                  listField "posts" postCtx posts     `mappend`
+                  postsField pattern                  `mappend`
                   constField "title" title            `mappend`
                   paginateContext archivePaginate pageNum `mappend`
                   myDefaultContext
@@ -167,6 +171,76 @@ main = hakyllWith config $ do
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
+
+    let
+        sortByDate x = do
+                          time <- getItemUTC defaultTimeLocale x
+                          return [formatTime defaultTimeLocale "%Y-%m" time]
+
+    archiveDates <- buildTagsWith
+                            sortByDate
+                            "posts/*"
+                            (\t -> fromFilePath $ "archive/dates/"++t++".html")
+
+    tagsRules archiveDates $ \tag pattern -> do
+      let pagePath' page | page == 1 = fromCapture "archive/dates/*.html" tag
+                         | otherwise = fromFilePath $ "archive/dates/"++tag++"/page/"++
+                                                show (page::PageNumber)++".html"
+      tagsPaginate <- buildPaginateWith
+                            (liftM (paginateEvery postsPerPage).sortRecentFirst)
+                            pattern pagePath'
+      let title = "Посты за " ++ tag
+
+      paginateRules tagsPaginate $ \pageNum pattern' -> do
+          route idRoute
+          compile $ do
+            let ctx = constField "title" title `mappend`
+                      postsField pattern' `mappend`
+                      paginateContext tagsPaginate pageNum `mappend`
+                      myDefaultContext
+            makeItem ""
+              >>= loadAndApplyTemplate "templates/archive.html" ctx
+              >>= loadAndApplyTemplate "templates/default.html" ctx
+              >>= relativizeUrls
+
+    create ["archive/index.html"] $ do
+        route idRoute
+        compile $ do
+          let ctx = constField "title" "Архив"    `mappend`
+                    myDefaultContext
+              link tag url count =
+                  (take 4 tag, (subtract 1 $ read $ drop 5 tag, url , show count))
+              list ls =
+                let
+                    getYears = map head $ group $ map fst ls
+                    getMonths = map (map snd) $ groupBy ((==) `on` fst) ls
+                    years = reverse $ zip getYears getMonths
+                    showYear (year, months') = renderHtml (H.h1 $ toHtml year) ++ renderHtml (H.ul $ showMonths months')
+                    showMonths = foldl (\acc x -> acc >> showMonth x) ""
+                    showMonth (month,url,count) = H.li $ H.a ! A.href (toValue url) $ toHtml $ monthNames !! month ++ "(" ++ count ++ ")"
+                    monthNames :: [String]
+                    monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"]
+                in
+                foldl (\acc x -> acc ++ showYear x) "" years
+              renderTags' makeHtml concatHtml tags1 = do
+                  -- In tags' we create a list: [((tag, route), count)]
+                  tags' <- forM (tagsMap tags1) $ \(tag, ids) -> do
+                      route' <- getRoute $ tagsMakeId tags1 tag
+                      return ((tag, route'), length ids)
+
+                  -- TODO: We actually need to tell a dependency here!
+
+                  let -- Absolute frequencies of the pages
+                      -- Create a link for one item
+                      makeHtml' ((tag, url), count) =
+                          makeHtml tag (toUrl $ fromMaybe "/" url) count
+
+                  -- Render and return the HTML
+                  return $ concatHtml $ map makeHtml' tags'
+          renderTags' link list archiveDates
+            >>= makeItem
+            >>= loadAndApplyTemplate "templates/default.html" ctx
+            >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
 
