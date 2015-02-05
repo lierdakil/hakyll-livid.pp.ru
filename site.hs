@@ -272,7 +272,7 @@ config = defaultConfiguration
   { deployCommand = makeDeployCommand hostlist }
   where
     makeDeployCommand = foldl ((.(++"; ")).(++)) ""
-                                        . map ("rsync -avz -e ssh ./_site/ "++)
+                                        . map ("rsync -avcz -e ssh ./_site/ "++)
     hostlist = [
                 "solar:/var/www/livid.pp.ru/hakyll/",
                 "vps.livid.pp.ru:/var/www/"
