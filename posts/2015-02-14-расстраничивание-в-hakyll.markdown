@@ -1,0 +1,137 @@
+---
+author: Livid
+title: Расстраничивание в Hakyll
+tags: Hakyll, Haskell
+---
+
+Пара слов о том, как сделать разделение набора элементов (например постов) на страницы. Примером может являться, скажем, главная страничка этого блога.
+
+<!--more-->
+
+Можно пойти путем джедая и пытаться писать что-то на коленке. Это сработает, но не факт, что стоит того. А можно воспользоваться модулем `Hakyll.Web.Paginate`. Мы пойдем по второму пути.
+
+Итак, что же нам нужно для того, чтобы сделать расстраничивание? В целом, совсем немного:
+
+Во-первых,
+```haskell
+buildPaginateWith ::
+      MonadMetadata m =>
+      ([Identifier] -> m [[Identifier]]) ->
+      Pattern ->
+      (PageNumber -> Identifier) ->
+      m Paginate
+```
+
+Эта функция, собственно, строит расстраничивание. Первый аргумент -- это функция, принимающая список идентификаторов и возвращающая список списков идентификаторов. Каждый список в возвращаемом списке -- это одна страница. Второй аргумент -- паттерн для выборки элементов, которые надо расстраничивать. Третий -- функция-генератор идентификатора от номера страницы. Возвращает тип `Paginate`. Все вычисления в монаде `Rules`, `Compiler`, etc.
+
+В простых случаях, например, если нужно разобрать посты на странички по `N` постов, есть функция
+```haskell
+paginateEvery :: Int -> [a] -> [[a]]
+```
+Конечно, она очень простая, и не сортирует идентификаторы. Для сортировки есть другие функции, например
+```haskell
+sortRecentFirst :: MonadMetadata m => [Identifier] -> m [Identifier]
+```
+определенная в `Hakyll.Web.Template.List`. Здесь можно заметить некоторое несоответствие: `paginateEvery` работает со списками, buildPaginateWith требует преобразование из списка в `MonadMetadata`, а `sortRecentFirst` возвращает `monadMetadata`. В принципе `do`-блок решает эту проблему, но я предпочитаю более идиоматический `liftM`, определенный в `Control.Monad`. Комбинируя эти функции, первый аргумент для `buildPaginateWith` может выглядеть, например, так:
+```haskell
+liftM (paginateEvery postsPerPage) . sortRecentFirst
+```
+где `postsPerPage` имеет тип `Int` и означает, собственно, сколько постов должно быть на странице. `.` это композиция функций, она означает "применить функцию слева к результату функции справа".
+
+Кроме `sortRecentFirst` есть `sortChronological`, сортирующая записи в хронологическом порядке. И естественно, можно задать свою функцию сортировки.
+
+Со вторым аргументом все должно быть в целом ясно: это может быть строка, например `"posts/*"`, или более сложный `Pattern`.
+
+Третий аргумент должен генерировать идентификаторы для номеров страниц. Я, скажем, использую такой вариант:
+```haskell
+let pagePath page | page==1   = fromFilePath   "index.html"
+                  | otherwise = fromFilePath $ "archive/page/"++
+                                            show (page::PageNumber)++".html"
+```
+
+`fromFilePath` просто делает из строки `Identifier`.
+
+Собирая все вместе,
+
+```haskell
+let pagePath page | page==1   = fromFilePath   "index.html"
+                  | otherwise = fromFilePath $ "archive/page/"++
+                                            show (page::PageNumber)++".html"
+archivePaginate <- buildPaginateWith
+                        (liftM (paginateEvery postsPerPage).sortRecentFirst)
+                        "posts/*" pagePath
+```
+
+Итак, у нас есть данные о расстраничивании в переменной `archivePaginate`. Теперь нам нужно построить правила для генерации страниц, и получить доступ к контексту страницы. Для этого есть функции `paginateRules` и `paginateContext` соответственно.
+
+```haskell
+paginateRules :: Paginate -> (PageNumber -> Pattern -> Rules ()) -> Rules ()
+paginateContext :: Paginate -> PageNumber -> Context a
+```
+
+`paginateRules` принимает результат `buildPaginateWith` (без монады) и функцию двух аргументов: номера страницы и паттерна, содержащего идентификаторы, которые должны быть на этой странице. Возвращать эта функция должна `Rules ()`, как и в случае с простым `match`.
+
+`paginateContext` принимает результат `buildPaginateWith` (без монады) и номер страницы.
+
+Посмотрим, как это можно использовать:
+```haskell
+paginateRules archivePaginate $ \pageNum pattern -> do
+    route idRoute -- относительный url совпадает с идентификатором
+    compile $ do
+        posts <- recentFirst =<< loadAll pattern -- загружаем посты для данной страницы
+        let
+            title | pageNum==1 = "Главная"
+                  | otherwise  = "Архив"
+            archiveCtx = -- конеткст
+              listField "posts" postCtx (return posts) `mappend` -- посты
+              constField "title" title                 `mappend` -- заголовок
+              paginateContext archivePaginate pageNum  `mappend` -- контекст страницы
+              defaultContext
+
+        makeItem ""
+            >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+            >>= relativizeUrls
+```
+`$` изменяет порядок ассоциативности аргументов. В рамках обсуждения можно считать, что все, что идет после `$` трактуется как один аргумент. По сути, это способ избежать скобочек. `\... ->` объявляет анонимную функцию, в данном случае двух аргументов.
+Контекст составляется из постов, определяемых паттерном `pattern`, заголовка, зависящего от номера страницы, и `paginateContext`.
+
+Что же содержит в себе `paginateContext`?
+
+* `firstPageNum` -- номер первой страницы, если текущая страница -- первая, то не задано.
+* `firstPageUrl` -- url первой страницы, если текущая страница -- первая, то не задано.
+* `previousPageNum` -- номер предыдущей страницы, если текущая страница -- первая, то не задано.
+* `previousPageUrl` -- url предыдущей страницы, если текущая страница -- первая, то не задано.
+* `nextPageNum` -- номер следующей страницы, если текущая страница -- последняя, то не задано.
+* `nextPageUrl` -- url следующей страницы, если текущая страница -- последняя, то не задано.
+* `lastPageNum` -- номер последней страницы, если текущая страница -- последняя, то не задано.
+* `lastPageUrl` -- url последней страницы, если текущая страница -- последняя, то не задано.
+* `currentPageNum` -- номер текущей страницы
+* `currentPageUrl` -- url текущей страницы
+* `numPages` -- общее количество страниц
+
+Составить навигацию по страницам, используя эти переменные шаблона, достаточно просто:
+
+```html
+<div>
+  $if(nextPageUrl)$
+  <a href="$nextPageUrl$">
+    Раньше
+  </a>
+  $endif$
+
+  $if(firstPageNum)$
+  Страница $currentPageNum$ из $numPages$
+  $endif$
+
+  $if(previousPageUrl)$
+  <a href="$previousPageUrl$">
+    Позже
+  </a>
+  $endif$
+</div>
+```
+
+Источники:
+
+* [Документация Hakyll](http://jaspervdj.be/hakyll/reference/index.html)
+* [Исходники этого блога](https://github.com/lierdakil/hakyll-livid.pp.ru/blob/master/site.hs)
