@@ -272,6 +272,7 @@ config = defaultConfiguration
   { deployCommand = makeDeployCommand hostlist }
   where
     makeDeployCommand = foldl ((.(++"; ")).(++)) ""
+                                        . ("git push":)
                                         . map ("rsync -avcz -e ssh ./_site/ "++)
     hostlist = [
                 "solar:/var/www/livid.pp.ru/hakyll/",
