@@ -175,16 +175,17 @@ main = hakyllWith config $ do
         sortByDate x = do
                           time <- getItemUTC defaultTimeLocale x
                           return [formatTime defaultTimeLocale "%Y-%m" time]
+        archivePattern = "archive/dates/*.html"
+        archiveId = fromCapture archivePattern
 
     archiveDates <- buildTagsWith
                             sortByDate
                             "posts/*"
-                            (\t -> fromFilePath $ "archive/dates/"++t++".html")
+                            archiveId
 
     tagsRules archiveDates $ \tag pattern -> do
-      let pagePath' page | page == 1 = fromCapture "archive/dates/*.html" tag
-                         | otherwise = fromFilePath $ "archive/dates/"++tag++"/page/"++
-                                                show (page::PageNumber)++".html"
+      let pagePath' page | page == 1 = archiveId tag
+                         | otherwise = archiveId $ tag++"/page/"++show page
       tagsPaginate <- buildPaginateWith
                             (liftM (paginateEvery postsPerPage).sortRecentFirst)
                             pattern pagePath'
@@ -202,7 +203,9 @@ main = hakyllWith config $ do
               >>= loadAndApplyTemplate "templates/default.html" ctx
               >>= relativizeUrls
 
-    create ["archive/index.html"] $ do
+    let tagDeps t = map (IdentifierDependency . tagsMakeId t . fst) $ tagsMap t
+    rulesExtraDependencies (tagDeps archiveDates) $
+      create ["archive/index.html"] $ do
         route idRoute
         compile $ do
           let ctx = constField "title" "Архив"    `mappend`
