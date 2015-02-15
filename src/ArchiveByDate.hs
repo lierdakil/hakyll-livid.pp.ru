@@ -17,8 +17,8 @@ import           Data.Maybe
 data DateInfo = DateInfo {
     diYear  :: Int
   , diMonth :: Int
-  , diUrl   :: String
   , diCount :: Int
+  , diUrl   :: String
 }
 
 sortByDate :: MonadMetadata m => Identifier -> m [String]
@@ -27,13 +27,8 @@ sortByDate x = do
   return [formatTime timeLocale "%Y-%m" time]
 
 makeDateInfo :: String -> Int -> String -> DateInfo
-makeDateInfo tag count url =
-    DateInfo {
-        diYear  = read $ take 4 tag
-      , diMonth = subtract 1 $ read $ drop 5 tag
-      , diUrl   = url
-      , diCount = count
-    }
+makeDateInfo tag =
+    uncurry DateInfo (dateTagToYM tag)
 
 renderDates :: [DateInfo] -> String
 renderDates ls = foldl (\acc x -> acc ++ showYear x) "" $ reverse years
@@ -54,9 +49,15 @@ renderArchiveDates tags =
 buildArchiveDates :: MonadMetadata m => Pattern -> (String -> Identifier) -> m Tags
 buildArchiveDates = buildTagsWith sortByDate
 
+dateTagToYM :: String -> (Int, Int)
+dateTagToYM tag = (year, month)
+  where
+  month = subtract 1 . read . drop 5 $ tag
+  year = read . take 4 $ tag
+
 dateTagToStr :: String -> String
 dateTagToStr tag = month ++ year
   where
-  month = monthNames !! getMonthNum tag
-  getMonthNum = subtract 1 . read . drop 5
-  year = take 4 tag
+  month = monthNames !! monthNum
+  monthNum = snd . dateTagToYM $ tag
+  year = show . fst . dateTagToYM $ tag
