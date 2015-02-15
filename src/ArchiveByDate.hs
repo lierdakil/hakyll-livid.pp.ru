@@ -36,7 +36,7 @@ makeDateInfo tag count url =
     }
 
 renderDates :: [DateInfo] -> String
-renderDates ls = foldl (\acc x -> acc ++ showYear x) "" years
+renderDates ls = foldl (\acc x -> acc ++ showYear x) "" $ reverse years
   where
     years = groupBy ((==) `on` diYear) ls
     showYear dil = renderHtml (H.h1 $ toHtml (diYear $ head dil)) ++ renderHtml (H.ul $ showMonths dil)
