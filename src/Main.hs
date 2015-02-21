@@ -17,11 +17,13 @@ main = hakyllWith config $ do
 
     let
       -- general paths
-      tagsCap  = "tags/*.html"
-      postsCap = "posts/*"
+      tagsCap   = "tags/*.html"
+      postsCap  = "posts/*"
+      staticCap = "static/*"
       archiveDateCap = "archive/dates/*.html"
       archivePagePath 1 = "index.html"
       archivePagePath p = pagePath "*.html" "archive" p
+      archiveDateIndexPath = "archive/index.html"
       -- page titles
       archiveTitle 1 = "Главная"
       archiveTitle _ = "Архив"
@@ -58,7 +60,7 @@ main = hakyllWith config $ do
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
-    match "static/*" $ do
+    match staticCap $ do
         route   $ setExtension "html"
         let ctx =
                   myDefaultContext
@@ -102,7 +104,7 @@ main = hakyllWith config $ do
           pattern (pagePath archiveDateCap date)
 
     withTagDeps archiveDates $
-      create ["archive/index.html"] $ do
+      create [archiveDateIndexPath] $ do
         route idRoute
         compile $ do
           let ctx = constField "title" "Архив"    `mappend`
