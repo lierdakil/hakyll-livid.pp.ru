@@ -47,7 +47,7 @@ main = hakyllWith config $ do
           disqusId = return.fst.splitExtension.toFilePath.itemIdentifier
       postsField = listField "posts" postCtx . recentSnapshots
       sortPaginate' = sortPaginate 10
-      doPaginate title paginate =
+      doPaginateTemplate title template paginate =
         paginateRules paginate $ \pageNum pattern -> do
             route idRoute
             compile $ do
@@ -57,8 +57,10 @@ main = hakyllWith config $ do
                         myDefaultContext
               makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" ctx
+                >>= template ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
+      doPaginate title = doPaginateTemplate title (\_ item -> return item)
 
     match staticCap $ do
         route   $ setExtension "html"
@@ -82,7 +84,7 @@ main = hakyllWith config $ do
             >>= relativizeUrls
 
     tagsRules tags $ \tag pattern ->
-      doPaginate (tagsTitle tag) =<<
+      doPaginateTemplate (tagsTitle tag) (loadAndApplyTemplate "templates/static.html") =<<
         buildPaginateWith
           sortPaginate'
           pattern (pagePath tagsCap tag)
@@ -98,7 +100,7 @@ main = hakyllWith config $ do
                             (fromCapture archiveDateCap)
 
     tagsRules archiveDates $ \date pattern ->
-      doPaginate (archiveDatesTitle date) =<<
+      doPaginateTemplate (archiveDatesTitle date) (loadAndApplyTemplate "templates/static.html") =<<
         buildPaginateWith
           sortPaginate'
           pattern (pagePath archiveDateCap date)
