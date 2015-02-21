@@ -56,7 +56,7 @@ dateTagToYM tag = (year, month)
   year = read . take 4 $ tag
 
 dateTagToStr :: String -> String
-dateTagToStr tag = month ++ year
+dateTagToStr tag = month ++ " " ++ year
   where
   month = monthNames !! monthNum
   monthNum = snd . dateTagToYM $ tag
