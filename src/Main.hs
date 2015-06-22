@@ -176,6 +176,6 @@ config = defaultConfiguration
                                         . ("git push":)
                                         . map ("rsync -avcz -e ssh ./_site/ "++)
     hostlist = [
-                "solar:/var/www/livid.pp.ru/hakyll/",
-                "vps:/var/www/"
+                  "solar:/var/www/livid.pp.ru/hakyll/"
+                -- , "vps:/var/www/"
                ]
