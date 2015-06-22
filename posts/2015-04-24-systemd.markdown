@@ -1,0 +1,152 @@
+---
+author: Livid
+title: Шпаргалка по миграции на systemd
+tags: systemd, kernel, howto
+published: 2015-06-22
+---
+
+Поставив себе на ноут Arch (потому что собирать Gentoo на мобильном процессоре тоскливо), с удивлением обнаружил, что мне в целом нравится systemd, несмотря на вопиющию неюниксвейность, а отчасти даже благодаря ей (например `journald` гораздо вменяемее, чем тысячи файлов в `/var/log`). Решил проверить, как дела с этим в Gentoo. Спойлер: неплохо.
+
+<!--more-->
+
+# Как перейти
+
+В общем этот материал -- выжимка из [Gentoo Wiki][1]
+
+## Ядро
+
+```
+CONFIG_GENTOO_LINUX_INIT_SYSTEMD=y
+```
+
+## /etc/mtab
+
+```
+ln -sf /proc/self/mounts /etc/mtab
+```
+
+Иначе будут проблемы с `df` и `mount`.
+
+## Initramfs
+
+initramfs сподручнее делать с помощью `dracut`. В конфиге `/etc/dracut.conf` советую написать по крайней мере `hostonly="yes"`.
+
+## Установка
+
+Включите USE-флаг `systemd`, и выключите `consolekit`, если он включен. Затем
+
+```
+emerge --deselect sys-fs/udev
+emerge -avDN @world
+```
+
+## Загрузка
+
+Добавьте `init=/usr/lib/systemd/systemd` как параметр ядра. Если используете genkernel-next для создания initramfs, то замените `init` на `real_init`.
+
+Главная засада в том, что все настроенные в openrc сервисы под systemd сами не запустятся, при первой загрузке запустится только необходимый минимум. Придется смотреть, что запускалось с openrc и добавлять это дело руками.
+
+В [Gentoo Wiki][1] есть табличка, по коротой можно "перевести" название init-скрипта openrc на сервис systemd. Дублировать не буду.
+
+# Конфигурация
+
+## Сеть
+
+Есть несколько вариантов, лично я предпочитаю `systemd-networkd`.
+
+Сетевые интерфейсы в таком случае настраиваются в  `/etc/systemd/network/*.network`. Подробную справку по параметрам можно найти в [мане][2].
+
+# Решение проблем
+
+## Failed to start Create Volatile Files and Directories.
+
+Проблема в том, что systemd пытается назначить ACL-аттрибуты в ФС. Чтобы это исправить, достаточно включить acl в fstab или при помощи `tune2fs -o acl /dev/slash-fs-drive`.
+
+## Failed at step EXEC spawning /usr/lib/systemd/scripts/mdadm_env.sh: No such file or directory
+
+В общем ничего страшного. Чтобы заткнуть ошибку, достаточно создать симлинк из /bin/true в /usr/lib/systemd/scripts/mdadm_env.sh.
+
+## Не монтируются сетевые ФС (напр. NFS)
+
+`systemctl enable systemd-networkd-wait-online.service`, если для настройки сети используется systemd-networkd -- иначе сеть считается поднятой после включения loopback.
+
+## Резолюция имен в текущем домене
+
+По умолчанию это дело выключено, но можно включить, добавив в конфиг интерфейса (`/etc/systemd/network/*.network`)
+
+```
+[DHCP]
+UseDomains=yes
+```
+
+## Настройки консольного шрифта и раскладки
+
+`/etc/vconsole.conf`:
+
+```
+KEYMAP=ruwin_cplk-UTF-8
+FONT=ter-u16n
+```
+
+Ну или что-то такое. Это вместо `/etc/conf.d/consolefont` и `/etc/conf.d/keymaps`.
+
+## LVM
+
+```
+systemctl enable lvm2-monitor.service
+```
+
+## Переопределение ExecStart
+
+`/etc/systemd/system/*.service.d/exec.conf`:
+
+```
+[Service]
+ExecStart =
+ExecStart = %newvalue%
+```
+
+## LXC
+
+Гости стартуются через сервисы `lxc@guestname.service`
+
+## ProFTPd
+
+Нужно дожидаться монтирования файловых систем.
+
+Сделать можно как-то так. `/etc/systemd/system/proftpd.service.d/wait-for-net.conf`:
+
+```
+[Unit]
+After=network-online.target local-fs.target remote-fs.target
+```
+
+## logcheck
+
+Можно написать что-то такое в /etc/cron.daily:
+
+```bash
+#!/bin/bash
+
+set -e
+
+if [ ! -d /var/lock/logcheck ]; then
+	mkdir -p /var/lock/logcheck
+fi
+chown -R logcheck:logcheck /var/lock/logcheck
+
+touch /tmp/journal.log
+setfacl -m g::--- -m o::--- /tmp/journal.log
+LC_ALL=C journalctl -m --since="-25h" | tail -n+2 >> /tmp/journal.log
+chown logcheck /tmp/journal.log
+su -s /bin/bash -c "/usr/sbin/logcheck -l /tmp/journal.log" logcheck
+rm /tmp/journal.log
+```
+
+# Ссылки
+
+1. <https://wiki.gentoo.org/wiki/Systemd>
+2. <http://www.freedesktop.org/software/systemd/man/systemd.network.html>
+
+[1]: <https://wiki.gentoo.org/wiki/Systemd>
+[2]: <http://www.freedesktop.org/software/systemd/man/systemd.network.html>
