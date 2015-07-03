@@ -13,7 +13,7 @@ Portage в Git, что может быть прекраснее?
 
 Затем сделать `git clone https://github.com/gentoo/gentoo-portage-rsync-mirror /usr/portage`.
 
-Теперь обновляем `/etc/portage/repo.conf/gentoo.conf`, раздел `[gentoo]`
+Теперь обновляем `/etc/portage/repos.conf/gentoo.conf`, раздел `[gentoo]`
 
 ```
 [gentoo]
