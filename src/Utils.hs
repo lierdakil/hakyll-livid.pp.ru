@@ -1,7 +1,7 @@
 module Utils where
 
 import Hakyll
-import System.Locale
+import Data.Time
 
 (!!?) :: [[a]] -> Int -> Maybe [a]
 list !!? i | i < length list,

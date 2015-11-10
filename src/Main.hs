@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 import Control.Applicative
 import Data.Monoid           (mappend)
 import Hakyll
