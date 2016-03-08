@@ -8,3 +8,5 @@ watch
 *.o
 dist
 Setup.hs
+cabal.sandbox.config
+.cabal-sandbox
