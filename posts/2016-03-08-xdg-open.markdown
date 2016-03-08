@@ -61,7 +61,7 @@ image/jpeg=okular.desktop
 
 `xdg-mime query filetype <filename>` позволяет узнать mime-тип файла.
 
-`xdg-mime query default <mime-type>` -- узнать приложение по умолчанию для открытия данного mime-типа
+`xdg-mime query default <mime-type>` -- узнать приложение по умолчанию для открытия данного mime-типа.
 
 ## Установка умолчаний
 
