@@ -33,9 +33,9 @@ tags: xdg-open, cheatsheet, desktop, X, xdg
 Теперь, как работает команда `xdg-mime query default`.
 
 1. Просматривается файл ассоциаций "по умолчанию" `$XDG_CONFIG_HOME/mimeapps.list`, и, если есть, системные `$XDG_CONFIG_DIRS/mimeapps.list`. Имеет значение только раздел `Default Applications` (см. ниже)
-2. Просматривается альтернативное расположение файла ассоциаций "по умолчанию" `$XDG_CONFIG_HOME/applications/mimeapps.list`, и, если есть, системные `$XDG_CONFIG_DIRS/applications/mimeapps.list`.
-3. Просматривается файлы кэша `$XDG_CONFIG_{HOME,DIRS}/applications/mimeinfo.cache` и умолчаний `$XDG_CONFIG_{HOME,DIRS}/applications/defaults.list`.
-4. Просматриваются все файлы `*.desktop` в  `$XDG_CONFIG_{HOME,DIRS}/applications` (включая поддиректории) `MimeType`. Выбирается вариант с наивысшим `InitialPreference`, или первый подходящий.
+2. Просматривается альтернативное расположение файла ассоциаций "по умолчанию" `$XDG_DATA_HOME/applications/mimeapps.list`, и, если есть, системные `$XDG_DATA_DIRS/applications/mimeapps.list`.
+3. Просматривается файлы кэша `$XDG_DATA_{HOME,DIRS}/applications/mimeinfo.cache` и умолчаний `$XDG_DATA_{HOME,DIRS}/applications/defaults.list`.
+4. Просматриваются все файлы `*.desktop` в  `$XDG_DATA_{HOME,DIRS}/applications` (включая поддиректории) `MimeType`. Выбирается вариант с наивысшим `InitialPreference`, или первый подходящий.
 5. Если ничего не найдено, возвращается ошибка.
 
 # Формат файла `mimeapps.list`
