@@ -6,7 +6,7 @@ version:             0.1.0.0
 -- synopsis:
 -- description:
 -- license:
-license-file:        LICENSE
+license-file:        LICENSE.md
 author:              Nikolay Yakimov
 maintainer:          root@livid.pp.ru
 -- copyright:
@@ -17,7 +17,10 @@ cabal-version:       >=1.10
 
 executable site
   main-is:             Main.hs
-  -- other-modules:
+  other-modules:
+    ArchiveByDate
+    Navigation
+    Utils
   -- other-extensions:
   build-depends:       base, hakyll, time, blaze-html, filepath
   hs-source-dirs:      src
