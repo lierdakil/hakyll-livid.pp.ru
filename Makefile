@@ -1,11 +1,11 @@
-all: build deploy
+all: deploy
 
-deploy:
-	./site deploy
+deploy: build
+	stack exec -- site deploy
 
 build:
-	./site build
+	stack exec -- site build
 
 rebuild:
-	cabal build
-	./site rebuild
+	stack build
+	stack exec -- site rebuild
