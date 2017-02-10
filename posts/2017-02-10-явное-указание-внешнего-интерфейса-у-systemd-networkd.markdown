@@ -4,7 +4,7 @@ published: 2017-02-10T19:29:35Z
 tags: systemd, net, systemd-netword
 ---
 
-# Проблема
+## Проблема
 
 При нестандартной конфигурации сети, `systemd-networkd-wait-online` отваливается с таймаутом.
 
@@ -16,7 +16,7 @@ systemd-networkd-wait-online[...]: Event loop failed: Connection timed out
 
 Само собой, сервисы, зависящие от `systemd-networkd-wait-online`, не стартуюут.
 
-# Решение
+## Решение
 
 Решение ситуации -- явно указать внешний интерфейс, который должен быть поднят чтобы считать сеть рабочей. Сделать это можно, например, создав файлик `/etc/systemd/system/systemd-networkd-wait-online.service.d/exec.conf` следующего содержания:
 
