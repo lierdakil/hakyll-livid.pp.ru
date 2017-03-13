@@ -1,7 +1,7 @@
 ---
 title: "Явное указание внешнего интерфейса у systemd-networkd-wait-online"
 published: 2017-02-10T19:29:35Z
-tags: systemd, net, systemd-netword
+tags: systemd, net, systemd-networkd
 ---
 
 ## Проблема
