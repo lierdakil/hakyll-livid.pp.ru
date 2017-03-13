@@ -1,6 +1,6 @@
 ---
 title: Closure-Compiler и ghcjs
-published: 2017-02-10T19:29:35Z
+published: 2017-03-13T19:29:35Z
 tags: ghc, ghcjs, haskell, node.js, javascript, closure-compiler
 ---
 
