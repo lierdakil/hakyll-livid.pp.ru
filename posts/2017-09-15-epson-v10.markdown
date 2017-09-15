@@ -1,0 +1,91 @@
+---
+title: Epson Perfection V10
+published: 2017-09-15T07:56:04Z
+tags: sane, epson, scanner, gentoo
+---
+
+Давным-давно пытался я пользоваться сканером Epson Perfection V10. И была у него одна беда: работал он либо под Windows, либо под i386, а на x86_64 драйверов не было. Недавно достал его с полки, сдул пыль, и решил узнать, не изменилось ли чего. Оказалось -- изменилось!
+
+<!--more-->
+
+В общем фабула такова: нужен epson'овский iscan, который есть в portage. Кроме того, для конкретно этого сканера нужен iscan-plugin-gt-s600, которого в portage нет. Зато его можно найти на сайте Epson. Поиск для Linux тут: <http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX>, а собственно сам драйвер тут: <http://support.epson.net/linux/en/iscan.php?model=gt-s600&version=1.0.0>. Там всё, однако, загружается кучей, и разбираться с этим не сильно хочется.
+
+Поскольку я человек ленивый, я [нашёл ebuild на gentoo forums](https://forums.gentoo.org/viewtopic-t-916440-start-0.html). Но по адресам, которые там прописаны файлов уже давно нет. Зато есть они в Epson'овском бандле. Но возиться доставать оттуда -- тоже не хочется. Беглый поиск по названию пакета показывает, что rpm-ки есть в федоре. Ну значит у них и возьмём!
+
+В результате получаем какой-то вот такой ebuild:
+
+```bash
+# Copyright 1999-2009 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+EAPI="2"
+
+inherit rpm
+
+# Revision used by upstream
+SRC_REV="1"
+
+MY_P="${P}-${SRC_REV}"
+
+DESCRIPTION="Epson Perfection V10/V100 PHOTO scanner plugin for SANE 'epkowa' backend."
+HOMEPAGE="http://www.avasys.jp/english/linux_e/dl_scan.html"
+SRC_URI="
+        x86?   ( http://pkgs.fedoraproject.org/lookaside/pkgs/iscan-firmware/iscan-plugin-gt-s600-2.1.2-1.i386.rpm/0a3a83dbbb2630c5e9453cc78983ab81/iscan-plugin-gt-s600-2.1.2-1.i386.rpm )
+        amd64? ( http://pkgs.fedoraproject.org/lookaside/pkgs/iscan-firmware/iscan-plugin-gt-s600-2.1.2-1.x86_64.rpm/9e36fd80b1f8ffa3f658b6a025d5e186/iscan-plugin-gt-s600-2.1.2-1.x86_64.rpm )"
+
+LICENSE="AVASYS Public License"
+SLOT="0"
+KEYWORDS="~x86 ~amd64"
+
+IUSE=""
+IUSE_LINGUAS="ja"
+
+for X in ${IUSE_LINGUAS}; do IUSE="${IUSE} linguas_${X}"; done
+
+DEPEND=">=media-gfx/iscan-2.18.0"
+RDEPEND="${DEPEND}"
+
+MY_LIB="/usr/$(get_libdir)"
+
+src_install() {
+        # install scanner firmware
+        insinto /usr/share/iscan
+        doins "${WORKDIR}"/usr/share/iscan/*
+
+        # install docs
+        if use linguas_ja; then
+           dodoc usr/share/doc/"${P}"/AVASYSPL.ja.txt
+         else
+           dodoc usr/share/doc/"${P}"/AVASYSPL.en.txt
+        fi
+
+        # install scanner plugins
+        insinto "${MY_LIB}"/iscan
+        INSOPTIONS="-m0755"
+        doins "${WORKDIR}"/usr/$(get_libdir)/iscan/libesint66.so.2.0.1
+        dosym libesint66.so.2.0.1 /usr/$(get_libdir)/iscan/libesint66.so.2
+        dosym libesint66.so.2.0.1 /usr/$(get_libdir)/iscan/libesint66.so
+}
+
+pkg_postinst() {
+        # Needed for scaner to work properly.
+        iscan-registry --add interpreter usb 0x04b8 0x012d ${MY_LIB}/iscan/libesint66 /usr/share/iscan/esfw66.bin
+
+        elog
+        elog "Firmware file esfw66.bin for Epson Perfection V10 /"
+        elog "V100 PHOTO has been installed in /usr/share/iscan and"
+        elog "registered for use"
+        elog
+}
+
+pkg_prerm() {
+        # Uninstall interpreter from iscan-registry before removal
+        iscan-registry --remove interpreter usb 0x04b8 0x012d ${MY_LIB}/iscan/libesint66 /usr/share/iscan/esfw66.bin
+}
+```
+
+Источники:
+
+* <http://linux-core.blogspot.co.uk/2015/09/epson-perfection-v100-gentoo.html>
+* <https://forums.gentoo.org/viewtopic-t-916440-start-0.html>
