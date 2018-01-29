@@ -9,6 +9,9 @@ deploy: build
 build:
 	$(call run, build)
 
+watch:
+	$(call run, watch --port 8081)
+
 rebuild:
 	stack build
 	$(call run, rebuild)
