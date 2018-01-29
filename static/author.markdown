@@ -43,4 +43,27 @@ Assembler, HTML, терпимо -- с Python и Haskell.
 * [VKontakte](http://vk.com/lierdakil)
 * [Twitter](http://twitter.com/lierdakil)
 * [LiveJournal](http://lierdakil.livejournal.com)
-* Jabber: root＠livid.pp.ru
+* [Telegram](https://telegram.me/lierdakil)
+* [Matrix](https://matrix.to/#/@lierdakil:matrix.org)
+* [Google](https://www.google.com/search?q=lierdakil) ¯\\\_(ツ)\_/¯
+* E-mail: <a id="email" href="#">нажмите чтобы показать</a>
+
+<script type="text/javascript">
+function enc(data, key) {
+  return data.split('').map(function (v,i) {
+    return (v.charCodeAt(0) ^ key.charCodeAt(i)).toString(32);
+  });
+};
+function dec(data, key) {
+  return data.map(function (v,i) {
+    return String.fromCharCode(parseInt(v,32) ^ key.charCodeAt(i));
+  }).join('');
+};
+document.querySelector('#email').addEventListener('click', function(e) {
+  e.preventDefault()
+  var data = ["a", "m", "2t", "1t", "1k", "17", "2g", "7", "j", "k", "2p", "23", "v", "2t", "18", "n"];
+  var key = 'xy2ItK9qzpw3osZb';
+  var email = dec(data, key);
+  this.outerHTML = '<a href="mailto:'+email+'">'+email+"</a>";
+});
+</script>
