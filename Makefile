@@ -1,11 +1,17 @@
-all: deploy
+define run
+	nix-shell -p lessc --run "stack exec -- site $(1)"
+endef
+all: build
 
 deploy: build
-	stack exec -- site deploy
+	$(call run, deploy)
 
 build:
-	stack exec -- site build
+	$(call run, build)
 
 rebuild:
 	stack build
-	stack exec -- site rebuild
+	$(call run, rebuild)
+
+clean:
+	$(call run, clean)
