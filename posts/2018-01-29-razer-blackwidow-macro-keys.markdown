@@ -54,7 +54,7 @@ tags: razer, blackwidow, macro, python, pyusb
 #
 #!/usr/bin/env python
 #
-# © 2016 Nikolay "Livid" Yakimov <root@livid.pp.ru>
+# (c) 2016 Nikolay "Livid" Yakimov <root@livid.pp.ru>
 # Based on code by Michael Fincham <michael@finch.am> 2012-03-05
 # This code is released under the MIT license.
 #
