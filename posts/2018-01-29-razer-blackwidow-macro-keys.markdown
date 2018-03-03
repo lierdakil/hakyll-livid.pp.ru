@@ -29,7 +29,7 @@ tags: razer, blackwidow, macro, python, pyusb
 
 ```python
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p 'python2.withPackages(ps: [ ps.pyusb ])'
+#!nix-shell --pure -i python -p "python2.withPackages(ps: [ ps.pyusb ])"
 
 # Persist environment: nix-shell -p 'python2.withPackages(ps: [ ps.pyusb ])' --indirect --add-root $HOME/.config/nixpkgs/gcroots/pythonUsb
 
@@ -104,8 +104,6 @@ if result == len(USB_BUFFER):
 else:
     sys.stderr.write("Configuration failed.\n")
     sys.exit(1)
-
-
 ```
 
 Источники:
