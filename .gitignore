@@ -7,6 +7,9 @@ watch
 *.hi
 *.o
 dist
+dist-newstyle
+cabal.project.local
+.ghc.environment.*
 Setup.hs
 cabal.sandbox.config
 .cabal-sandbox

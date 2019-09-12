@@ -1,5 +1,5 @@
 define run
-	nix-shell -p lessc --run "stack exec -- site $(1)"
+	nix-shell -p lessc --run "cabal run -- site $(1)"
 endef
 all: build
 
@@ -13,7 +13,7 @@ watch:
 	$(call run, watch --port 8081)
 
 rebuild:
-	stack build
+	cabal build
 	$(call run, rebuild)
 
 clean:
