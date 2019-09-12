@@ -19,7 +19,7 @@ navigationField = functionField "navigation" navigationLink
                       else
                         ""
                       )++ classes ++ "\""
-            Just argUrl <- getRoute identifier
+            argUrl <- fromJust <$> getRoute identifier
             return $
                 "<li "++cls++"><a href=\"/"++argUrl++"\">"++
                 text ++"</a></li>"
