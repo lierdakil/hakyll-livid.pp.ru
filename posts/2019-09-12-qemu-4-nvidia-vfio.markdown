@@ -1,6 +1,6 @@
 ---
 title: QEMU 4.0 Q35 и проблемы с пробросом графики
-published: 2018-01-29T04:43:53Z
+published: 2019-09-12T13:43:53Z
 tags: razer, blackwidow, macro, python, pyusb
 ---
 
