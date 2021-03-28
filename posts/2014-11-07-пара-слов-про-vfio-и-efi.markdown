@@ -3,7 +3,7 @@ author: Livid
 date: 2014-11-07 23:24:25+00:00
 title: Пара слов про VFIO и EFI
 wordpress_id: 686
-tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows ,Gentoo, kernel, patch
+tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows ,Gentoo, kernel, patch, виртуализация
 ...
 
 В [предыдущем

@@ -3,7 +3,7 @@ author: Livid
 date: 2014-11-08 13:22:55+00:00
 title: В догонку, OVMF и Windows 7
 wordpress_id: 695
-tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows, Windows 7 ,Без рубрики
+tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows, Windows 7, виртуализация
 ...
 
 К [предыдущему

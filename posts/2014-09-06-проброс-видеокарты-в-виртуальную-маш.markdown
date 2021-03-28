@@ -3,7 +3,7 @@ author: Livid
 date: 2014-09-06 22:27:39+00:00
 title: Проброс видеокарты в виртуальную машину средствами KVM VFIO
 wordpress_id: 672
-tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows ,Gentoo, kernel, patch
+tags: Gentoo, kernel, kvm, qemu, vfio, vga passthrough, Windows ,Gentoo, kernel, patch, виртуализация
 ...
 
 Давеча я уже писал о пробросе видеокарты средствами Xen. Какое-то время
