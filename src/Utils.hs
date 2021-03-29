@@ -16,8 +16,8 @@ pagePath cap name page
   | page == 1 = fromCapture cap   name
   | otherwise = fromCapture cap $ name++"/page/"++show page
 
-sortPaginate :: (Functor f, MonadMetadata f) => Int -> [Identifier] -> f [[Identifier]]
-sortPaginate postsPerPage = fmap (paginateEvery postsPerPage).sortRecentFirst
+sortPaginate :: (Functor f, MonadMetadata f, MonadFail f) => Int -> [Identifier] -> f [[Identifier]]
+sortPaginate postsPerPage = fmap (paginateEvery postsPerPage) . sortRecentFirst
 
 tagDeps :: Tags -> [Dependency]
 tagDeps t = map (IdentifierDependency . tagsMakeId t . fst) $ tagsMap t

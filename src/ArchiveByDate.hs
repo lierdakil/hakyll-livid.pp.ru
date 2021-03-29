@@ -21,7 +21,7 @@ data DateInfo = DateInfo {
   , diUrl   :: String
 }
 
-sortByDate :: MonadMetadata m => Identifier -> m [String]
+sortByDate :: (MonadMetadata m, MonadFail m) => Identifier -> m [String]
 sortByDate x = do
   time <- getItemUTC timeLocale x
   return [formatTime timeLocale "%Y-%m" time]
@@ -46,7 +46,7 @@ renderArchiveDates tags =
       (makeDateInfo tag (length ids) . toUrl . fromMaybe "/") <$>
         getRoute (tagsMakeId tags tag)
 
-buildArchiveDates :: MonadMetadata m => Pattern -> (String -> Identifier) -> m Tags
+buildArchiveDates :: (MonadFail m, MonadMetadata m) => Pattern -> (String -> Identifier) -> m Tags
 buildArchiveDates = buildTagsWith sortByDate
 
 dateTagToYM :: String -> (Int, Int)
