@@ -1,5 +1,5 @@
 define run
-	nix-shell -p lessc --run "cabal run -- site $(1)"
+	nix-shell -p lessc --run "bin/site $(1)"
 endef
 all: build
 
@@ -13,7 +13,7 @@ watch:
 	$(call run, watch --port 8081)
 
 rebuild:
-	cabal build
+	cabal install --installdir=$(PWD)/bin --install-method=copy
 	$(call run, rebuild)
 
 clean:
