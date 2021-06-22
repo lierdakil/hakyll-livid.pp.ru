@@ -19,7 +19,7 @@ tags: BASh, player ,BASh, Cheats
 
 
 ```bash
-find -type f -print0 | sort -z | cpio -0 -pd 
+find -type f -print0 | sort -z | cpio -0 -pd <new-dir>
 ```
 
 
@@ -40,7 +40,7 @@ find -type f -print0 | sort -z | cpio -0 -pd
 директории (с учетом вложений) в другую:
 
 ```bash
-find -iname *.jpg -print0 | cpio -0 -pd 
+find -iname *.jpg -print0 | cpio -0 -pd <dest-dir>
 ```
 
 
