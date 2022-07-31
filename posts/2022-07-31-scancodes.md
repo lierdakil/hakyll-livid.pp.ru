@@ -1,6 +1,6 @@
 ---
 title: Scancodes, keycodes, evdev, X
-published: 2022-04-15T18:16:40Z
+published: 2022-08-01T00:05:40Z
 tags: X11, evdev, keyboards
 ---
 
