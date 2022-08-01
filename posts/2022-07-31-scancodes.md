@@ -1,7 +1,7 @@
 ---
 title: Scancodes, keycodes, evdev, X
 published: 2022-08-01T00:05:40Z
-tags: X11, evdev, keyboards
+tags: X, evdev, keyboards
 ---
 
 Если вы вдруг захотите собрать себе кастомную клавиатуру (например на QMK),
