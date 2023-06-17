@@ -3,67 +3,19 @@ author: Livid
 title: Об авторе
 ---
 
-Я закончил физический факультет МГУ им. М.В. Ломоносова, сейчас работаю
-в области прикладной математики и математического моделирования. Попутно
-пишу диссертацию на соискание степени кандидата технических наук по теме
-математического моделирования сложных междисциплинарных задач. В силу
-некоторых рабочих задач, неплохо знаком с C++, PHP/MySQL, Intel
-Assembler, HTML, терпимо -- с Python и Haskell.
+```
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-В какой-то момент меня настолько замучили мелкомягкие, что я потер со всех своих машин окна и
-поставил - сперва - openSuSE. Однако, из "любви" к репозитариям, которые
-с завидной регулярностью падают и корявой (на мой вкус) системе
-обновления, а так же из-за договора Novell с мелкомягкими, я решил
-перейти на что-нибудь Debian-образное. Так у меня начался период
-убунтоводства, который довольно быстро прошел. Чуть больше освоившись с
-линухом и перейдя на Gentoo пришел к неутешительным выводам, что оно
-лучше. Особенно в сравнении с Intrepid Ibex, на которого я имел
-неосторожность обновиться сразу после релиза. Блог с тех пор пережил
-ребрендинг и изменение основной темы сообщений, хотя, признаем честно,
-что в основном все применимо для любого настольного линуха в той или
-иной мере, за исключением решений gentoo-специфических проблем.
-
-Сейчас Gentoo развернут на три стационарных машины и постоянно используется в
-повседневной работе. И еще есть Arch на ноутбуке, потому что собирать
-что-то на моем ноутбуке -- медленно и грустно, а откуда ssh-иться на
-свои основные машины, по большому счету все равно. О причинах же,
-сподвигнувших меня к реализации этого проекта (идея уже некоторое время
-витала в воздухе), я написал в разделе "О сайте" и продублировал в
-первом посте блога.
-
-Если вы дочитали до конца этот графоманский бред, то
-я немного удивлен :)
-
-В общем, чтобы ваши демоны не падали в кору, а
-сорцы компилились с первого раза.
-
-Меня можно найти в:
-
-* [Facebook](http://facebook.com/lierdakil)
-* [VKontakte](http://vk.com/lierdakil)
-* [Twitter](http://twitter.com/lierdakil)
-* [LiveJournal](http://lierdakil.livejournal.com)
-* [Telegram](https://telegram.me/lierdakil)
-* [Matrix](https://matrix.to/#/@lierdakil:matrix.org)
-* [Google](https://www.google.com/search?q=lierdakil) ¯\\\_(ツ)\_/¯
-* E-mail: <a id="email" href="#">нажмите чтобы показать</a>
-
-<script type="text/javascript">
-function enc(data, key) {
-  return data.split('').map(function (v,i) {
-    return (v.charCodeAt(0) ^ key.charCodeAt(i)).toString(32);
-  });
-};
-function dec(data, key) {
-  return data.map(function (v,i) {
-    return String.fromCharCode(parseInt(v,32) ^ key.charCodeAt(i));
-  }).join('');
-};
-document.querySelector('#email').addEventListener('click', function(e) {
-  e.preventDefault()
-  var data = ["a", "m", "2t", "1t", "1k", "17", "2g", "7", "j", "k", "2p", "23", "v", "2t", "18", "n"];
-  var key = 'xy2ItK9qzpw3osZb';
-  var email = dec(data, key);
-  this.outerHTML = '<a href="mailto:'+email+'">'+email+"</a>";
-});
-</script>
+mDMEY2fcJhYJKwYBBAHaRw8BAQdAcB1Ouge/OnTyfJwcR6gQgg3S69tfXQ34HfTS
+mxfoZ6K0Lk5pa29sYXkgIkxpZXJkYWtpbCIgWWFraW1vdiA8cm9vdEBsaXZpZC5w
+cC5ydT6ImQQTFggAQRYhBGd/9tdJyQytnlPI2IjonZxCEfGXBQJjZ9wmAhsDBQkS
+zAMABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEIjonZxCEfGXDQsBANcW
+tfs4b+PpZkhh7AFa80tFUf14ymSMmBss2+ytGbLFAQCvk9LyfUqDn9a4yHR/LMoj
+uvXwpgKU/xq++buL+rJ+D7g4BGNn3CYSCisGAQQBl1UBBQEBB0APm80AO/G2smKd
+mJLG/uLiyOqkgtn7DWX/vVgK1zTIaAMBCAeIfgQYFggAJhYhBGd/9tdJyQytnlPI
+2IjonZxCEfGXBQJjZ9wmAhsMBQkSzAMAAAoJEIjonZxCEfGXYKEA/1gGVyEX4dLX
+qwddjBFROhkjQXdelCyPI5rHses/TiVtAQCyrklV0u3F3qAt+fd9e/xKuuN93L+r
+f0t/dmHhPP93CQ==
+=YkTB
+-----END PGP PUBLIC KEY BLOCK-----
+```
