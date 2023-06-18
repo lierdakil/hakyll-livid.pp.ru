@@ -64,4 +64,10 @@ gpg --export-secret-keys <keyid> | lzma | base32 | qrencode -ooutput.eps -lH -tE
 офлайн -- эллиптические публичные ключи тоже достаточно короткие. На правах
 proof of concept:
 
+`gpg --export --armor`:
+
 ![QR-код c публичным ключом PGP](/files/gpg_pk.png)
+
+`gpg --export | lzma | base32`:
+
+![QR-код c публичным ключом PGP, сжатый и закодированный в base32](/files/gpg_pk_lzma_base32.png)
