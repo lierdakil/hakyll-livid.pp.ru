@@ -1,5 +1,5 @@
 ---
-title: Scancodes, keycodes, evdev, X
+title: PGP ключи в виде QR-кодов
 published: 2023-06-18T04:35:30Z
 tags: PGP, GPG, QR
 ---
