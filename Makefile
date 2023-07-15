@@ -1,5 +1,5 @@
 define run
-	nix-shell -p lessc --run "bin/site $(1)"
+	nix shell nixpkgs#lessc -c bin/site $(1)
 endef
 all: build
 
