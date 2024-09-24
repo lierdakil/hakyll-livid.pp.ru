@@ -17,7 +17,7 @@ tags: CD, Звук ,Soft, Звук
 Извлечь отдельные записи можно командой
 
 ```bash
-cdparanoia -d  -B 
+cdparanoia -d <dev> -B
 ```
 
 
