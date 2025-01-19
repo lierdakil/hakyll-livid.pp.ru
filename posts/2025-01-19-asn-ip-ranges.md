@@ -18,3 +18,25 @@ bgpq4 -6 as12345 # для ipv6
 ```bash
 bgpq4 -A4F '%n/%l\n' as12345
 ```
+
+<!-- more -->
+
+Скажем, если хочется забить в address list на микротике, можно набросать какой-то такой скрипт:
+
+```bash
+#!/usr/bin/env bash
+
+ASN="$1"
+name="$2"
+version="${3:-46}"
+
+go() {
+  local v=$1
+  local ip=$2
+  echo "/$ip/firewall/address-list remove numbers=[find list=$name]"
+  bgpq4 -A"${v}"F "/$ip/firewall/address-list/add list=$name address=%n/%l comment=$ASN\n" "$ASN"
+}
+
+[[ "$version" =~ "4" ]] && go 4 ip
+[[ "$version" =~ "6" ]] && go 6 ipv6
+```
