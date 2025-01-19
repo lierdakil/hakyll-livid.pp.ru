@@ -9,6 +9,6 @@ mkDerivation {
   executableHaskellDepends = [
     base blaze-html filepath hakyll time
   ];
-  license = "unknown";
+  license = lib.licenses.mit;
   mainProgram = "site";
 }
