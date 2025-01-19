@@ -1,7 +1,7 @@
 ---
 title: Prometheus exporter на QNAP
 published: 2024-07-28T14:28:02Z
-tags: prometheus, quap, monitoring, docker
+tags: prometheus, qnap, monitoring, docker
 ---
 
 На днях _внезапно_ развалился рейд (никогда такого не было и вот опять). Как
