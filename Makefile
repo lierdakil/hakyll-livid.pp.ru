@@ -4,9 +4,10 @@ all: build
 
 deploy: build
 	git push
-	rsync -avcz -e ssh --rsync-path="sudo rsync" ./_site/ chaya:/var/www/livid.pp.ru/htdocs/
+	rsync -avcz -e ssh --delete --rsync-path="sudo rsync" ./_site/ chaya:/var/www/livid.pp.ru/htdocs/
 
 build:
+	nix build .
 	nix run . -- build
 
 watch:
