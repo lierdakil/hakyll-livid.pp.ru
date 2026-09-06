@@ -1,7 +1,7 @@
 ---
 title: Верните мою вставку выбранного текста по среднему клику взад!
 published: 2026-09-06T12:47:12Z
-tags: gnome, chromium, clipboard, primary
+tags: gnome, gtk, chromium, clipboard, primary
 ---
 
 Gnome в своей бесконечной мудрости недавно отключили по умолчанию вставку по
