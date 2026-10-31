@@ -4,7 +4,7 @@ all: build
 
 deploy: build
 	git push
-	rsync -avcz -e ssh --delete --rsync-path="sudo rsync" ./_site/ chaya:/var/www/livid.pp.ru/htdocs/
+	rclone sync ./_site/ weed:static-sites/livid.pp.ru/
 
 build:
 	nix build .
