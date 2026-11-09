@@ -3,7 +3,7 @@
 all: build
 
 deploy: build
-	rclone sync ./_site/ weed:static-sites/livid.pp.ru/
+	hugo deploy --confirm
 
 build:
 	hugo build --cleanDestinationDir

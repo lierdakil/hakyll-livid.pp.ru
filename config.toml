@@ -74,3 +74,7 @@ suffixes = ["xml"]
 
 [outputFormats.RSS]
 baseName = "rss"
+
+[[deployment.targets]]
+name = 'production'
+url = 's3://livid.pp.ru?endpoint=http://solar:7070&region=us-east-1&use_path_style=true&awssdk=v2'
