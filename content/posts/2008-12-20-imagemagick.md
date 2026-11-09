@@ -3,7 +3,7 @@ date: 2008-12-20T08:56:19Z
 year-month: 2008-12
 title: imagemagick
 wordpress_id: 167
-tags: ["Gentoo", "ImageMagick", "overlay", "Gentoo"]
+tags: ["Gentoo", "ImageMagick", "overlay"]
 ---
 
 В нестабильную ветку Gentoo вылез imagemagick с багом

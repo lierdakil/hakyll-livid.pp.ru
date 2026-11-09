@@ -3,7 +3,7 @@ date: 2011-03-10T18:55:20Z
 year-month: 2011-03
 title: Внезапно, hot-swap sata-дисков
 wordpress_id: 511
-tags: ["BASh", "block", "hot-plug", "hot-swap", "sata", "scsi", "sysfs","BASh", "Cheats", "kernel"]
+tags: ["BASh", "block", "hot-plug", "hot-swap", "sata", "scsi", "sysfs", "Cheats", "kernel"]
 ---
 
 По ссылке

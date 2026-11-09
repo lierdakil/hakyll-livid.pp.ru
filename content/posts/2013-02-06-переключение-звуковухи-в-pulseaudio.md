@@ -3,7 +3,7 @@ date: 2013-02-06T10:05:21Z
 year-month: 2013-02
 title: Переключение звуковухи в PulseAudio
 wordpress_id: 586
-tags: ["BASh", "PulseAudio", "Звук","BASh", "Cheats", "Звук"]
+tags: ["BASh", "PulseAudio", "Звук", "Cheats"]
 ---
 
 Иногда бывает нужно перенести все источники звука на другой синк

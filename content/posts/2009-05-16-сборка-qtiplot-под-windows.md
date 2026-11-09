@@ -3,7 +3,7 @@ date: 2009-05-16T20:19:48Z
 year-month: 2009-05
 title: Сборка QtiPlot под Windows
 wordpress_id: 297
-tags: ["qtiplot", "Windows","Windows"]
+tags: ["qtiplot", "Windows"]
 ---
 
 Это, конечно, оффтопик, но собирать qtiplot под windows проходится долго

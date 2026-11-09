@@ -3,7 +3,7 @@ date: 2009-06-13T08:45:55Z
 year-month: 2009-06
 title: Kernel updater v2
 wordpress_id: 320
-tags: ["BASh", "Gentoo", "kernel","BASh", "Cheats", "Gentoo", "kernel"]
+tags: ["BASh", "Gentoo", "kernel", "Cheats"]
 ---
 
 Немного допилил свой недавний скрипт. Учел предолжение в комментариях,

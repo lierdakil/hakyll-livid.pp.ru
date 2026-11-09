@@ -3,7 +3,7 @@ date: 2013-02-13T03:17:36Z
 year-month: 2013-02
 title: Kernel-updater v3
 wordpress_id: 592
-tags: ["BASh", "Gentoo", "kernel","BASh", "Cheats", "Gentoo", "kernel"]
+tags: ["BASh", "Gentoo", "kernel", "Cheats"]
 ---
 
 Без комментариев, под катом просто версия старого скрипта, которой я

@@ -3,7 +3,7 @@ date: 2009-02-17T21:36:12Z
 year-month: 2009-02
 title: Gparted LiveCD через Grub4DOS
 wordpress_id: 239
-tags: ["Gentoo", "gparted", "grub4dos", "iso","Cheats", "Gentoo"]
+tags: ["Gentoo", "gparted", "grub4dos", "iso", "Cheats"]
 ---
 
 Всякие [проблемы с ICQ](/posts/2009-01-21-icq.html) как-то совершенно

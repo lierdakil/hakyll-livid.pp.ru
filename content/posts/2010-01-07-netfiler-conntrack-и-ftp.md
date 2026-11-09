@@ -3,7 +3,7 @@ date: 2010-01-07T19:31:45Z
 year-month: 2010-01
 title: Netfiler, conntrack и ftp
 wordpress_id: 392
-tags: ["conntrack", "ftp", "Gentoo", "modules", "netfilter","Cheats", "Gentoo", "kernel", "Сеть"]
+tags: ["conntrack", "ftp", "Gentoo", "modules", "netfilter", "Cheats", "kernel", "Сеть"]
 ---
 
 Для тех несчастных, кто по тем или иным причинам вынужден держать ftp на

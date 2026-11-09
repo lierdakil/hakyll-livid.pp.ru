@@ -3,7 +3,7 @@ date: 2010-01-30T15:19:21Z
 year-month: 2010-01
 title: Yota в Ubuntu
 wordpress_id: 484
-tags: ["i2400m", "Intel", "iwl5050", "MSI", "Ubuntu", "Wi-Fi", "WiMax", "Wind U120", "Yota","MSI Wind u120", "Ubuntu", "Wi-Fi", "Ноутбуки", "Сеть", "patch"]
+tags: ["i2400m", "Intel", "iwl5050", "MSI", "Ubuntu", "Wi-Fi", "WiMax", "Wind U120", "Yota", "MSI Wind u120", "Ноутбуки", "Сеть", "patch"]
 ---
 
 Недавно приобрел себе игрушку -- MSI Wind U120. Дешевый и

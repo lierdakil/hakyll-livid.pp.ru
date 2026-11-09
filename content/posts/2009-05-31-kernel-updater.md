@@ -3,7 +3,7 @@ date: 2009-05-31T19:49:07Z
 year-month: 2009-05
 title: Kernel updater
 wordpress_id: 316
-tags: ["BASh", "Gentoo", "kernel","BASh", "Cheats", "Gentoo", "kernel"]
+tags: ["BASh", "Gentoo", "kernel", "Cheats"]
 ---
 
 Сегодня по синку опять прилетел апдейт для ядра. И что-то мне так уже

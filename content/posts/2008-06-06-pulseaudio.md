@@ -3,7 +3,7 @@ date: 2008-06-06T20:51:51Z
 year-month: 2008-06
 title: PulseAudio
 wordpress_id: 8
-tags: ["Debian", "PulseAudio", "Debian", "Звук"]
+tags: ["Debian", "PulseAudio", "Звук"]
 ---
 
 В первом сообщении я заикнулся об этой системке, однако собрался немного

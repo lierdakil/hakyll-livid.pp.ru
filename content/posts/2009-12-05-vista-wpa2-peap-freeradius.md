@@ -3,7 +3,7 @@ date: 2009-12-05T17:27:00Z
 year-month: 2009-12
 title: Vista WPA2-PEAP + FreeRadius
 wordpress_id: 380
-tags: ["FreeRadius", "Radius", "Vista", "Wi-Fi", "Windows", "WPA2","Soft", "Wi-Fi", "Windows", "Сеть"]
+tags: ["FreeRadius", "Radius", "Vista", "Wi-Fi", "Windows", "WPA2", "Soft", "Сеть"]
 ---
 
 Если вы когда-нибудь пытались подружить Windows и FreeRadius для целей

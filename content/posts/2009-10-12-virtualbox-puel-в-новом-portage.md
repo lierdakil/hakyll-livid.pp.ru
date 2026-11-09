@@ -3,7 +3,7 @@ date: 2009-10-12T23:48:18Z
 year-month: 2009-10
 title: VirtualBox PUEL в новом portage
 wordpress_id: 373
-tags: ["Gentoo", "portage", "puel", "virtualbox","Gentoo", "Soft"]
+tags: ["Gentoo", "portage", "puel", "virtualbox", "Soft"]
 ---
 
 Для тех, кто еще не в курсе, и кому лень читать маны, в ответ на

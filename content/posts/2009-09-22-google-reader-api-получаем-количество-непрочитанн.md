@@ -3,7 +3,7 @@ date: 2009-09-22T21:15:08Z
 year-month: 2009-09
 title: 'Google Reader API: Получаем количество непрочитанных записей'
 wordpress_id: 350
-tags: ["API", "BASh", "Google","BASh", "Cheats"]
+tags: ["API", "BASh", "Google", "Cheats"]
 ---
 
 В общем, не мудрствуя лукаво, на правах заметки.

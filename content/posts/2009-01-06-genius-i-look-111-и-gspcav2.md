@@ -3,7 +3,7 @@ date: 2009-01-06T20:31:59Z
 year-month: 2009-01
 title: Genius i-Look 111 и gspcav2
 wordpress_id: 214
-tags: ["Gentoo", "iLook", "kernel", "webcam", "Gentoo", "kernel", "Железо", "patch"]
+tags: ["Gentoo", "iLook", "kernel", "webcam", "Железо", "patch"]
 ---
 
 Решил я, что негоже пользоваться deprecated системой (gspcav1) и надо

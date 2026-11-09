@@ -3,7 +3,7 @@ date: 2009-09-12T11:37:23Z
 year-month: 2009-09
 title: Distcc в Gentoo
 wordpress_id: 340
-tags: ["Compilation", "Distcc", "Gentoo","Cheats", "Gentoo", "Soft"]
+tags: ["Compilation", "Distcc", "Gentoo", "Cheats", "Soft"]
 ---
 
 > -- А где Gentoo, он еще не пришел?

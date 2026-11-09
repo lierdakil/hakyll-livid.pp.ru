@@ -3,7 +3,7 @@ date: 2013-07-24T10:18:54Z
 year-month: 2013-07
 title: Проброс Radeon HD 7750 в виртуальную машину Windows 7 под управлением Xen
 wordpress_id: 598
-tags: ["Gentoo", "kernel", "vga passthrough", "Windows", "xen","Gentoo", "kernel", "Windows"]
+tags: ["Gentoo", "kernel", "vga passthrough", "Windows", "xen"]
 ---
 
 Уже много копий переломано и текста понаписано

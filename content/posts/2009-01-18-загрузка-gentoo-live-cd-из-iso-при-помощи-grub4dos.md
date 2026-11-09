@@ -3,7 +3,7 @@ date: 2009-01-18T02:44:34Z
 year-month: 2009-01
 title: Загрузка Gentoo Live CD из ISO при помощи grub4dos
 wordpress_id: 221
-tags: ["Gentoo", "grub4dos", "iso", "Cheats", "Gentoo"]
+tags: ["Gentoo", "grub4dos", "iso", "Cheats"]
 ---
 
 Это, на самом деле, развлечение для настоящих джедаев, зато весело)

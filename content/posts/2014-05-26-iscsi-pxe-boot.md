@@ -3,7 +3,7 @@ date: 2014-05-26T04:57:06Z
 year-month: 2014-05
 title: iSCSI PXE Boot
 wordpress_id: 630
-tags: ["Gentoo", "iPXE", "iSCSI", "Netboot", "PXE","Gentoo", "kernel"]
+tags: ["Gentoo", "iPXE", "iSCSI", "Netboot", "PXE", "kernel"]
 ---
 
 Речь пойдет о загрузке бездисковых станций с iSCSI. Вариантов много, я

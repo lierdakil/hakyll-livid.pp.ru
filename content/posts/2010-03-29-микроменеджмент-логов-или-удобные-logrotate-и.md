@@ -3,7 +3,7 @@ date: 2010-03-29T04:49:46Z
 year-month: 2010-03
 title: Микроменеджмент логов или удобные logrotate и syslog-ng
 wordpress_id: 492
-tags: ["BASh", "Gentoo", "logrotate", "logs", "monitoring", "syslog-ng","BASh", "Cheats", "Gentoo", "Soft"]
+tags: ["BASh", "Gentoo", "logrotate", "logs", "monitoring", "syslog-ng", "Cheats", "Soft"]
 ---
 
 Заголовок слегка отдает желтизной, но Бог бы с ним. А суть вот в чем:

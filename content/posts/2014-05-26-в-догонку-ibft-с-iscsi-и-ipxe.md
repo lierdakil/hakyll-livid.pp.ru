@@ -3,7 +3,7 @@ date: 2014-05-26T07:58:50Z
 year-month: 2014-05
 title: 'В догонку: iBFT с iSCSI и iPXE'
 wordpress_id: 646
-tags: ["Gentoo", "iPXE", "iSCSI", "Netboot", "PXE","Gentoo", "kernel"]
+tags: ["Gentoo", "iPXE", "iSCSI", "Netboot", "PXE", "kernel"]
 ---
 
 Оказывается, iPXE умеет сообщать системе, с какого, собственно, iSCSI

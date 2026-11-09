@@ -3,7 +3,7 @@ date: 2009-10-05T06:15:52Z
 year-month: 2009-10
 title: Кросс-DistCC в Gentoo
 wordpress_id: 361
-tags: ["Compilation", "Distcc", "Gentoo","Cheats", "Gentoo", "Soft"]
+tags: ["Compilation", "Distcc", "Gentoo", "Cheats", "Soft"]
 ---
 
 Недавно я [рассказывал](/?p=340) о том, как настроить distcc для ваших

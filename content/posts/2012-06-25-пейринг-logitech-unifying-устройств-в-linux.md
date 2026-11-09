@@ -3,7 +3,7 @@ date: 2012-06-25T22:40:56Z
 year-month: 2012-06
 title: Пейринг Logitech Unifying устройств в Linux
 wordpress_id: 568
-tags: ["Compilation", "Google", "kernel", "logitech", "unifying","Cheats", "kernel", "Soft", "Железо"]
+tags: ["Compilation", "Google", "kernel", "logitech", "unifying", "Cheats", "Soft", "Железо"]
 ---
 
 Смысл в том, что Logitech для своих новых радиомышей/клавиатур
