@@ -1,0 +1,15 @@
+{{ range .Paginator.Pages }}
+  <a href="{{ .RelPermalink }}"><h2 class="post-list-title">{{ .Title }}</h2></a>
+  {{ if .Date }}
+  <div class="date">{{ time.Format ":date_long" .Date }}</div>
+  {{ end }}
+  <a href="{{ .RelPermalink }}#disqus_thread" data-disqus-identifier="{{ .File.Path | replaceRE "\\.md$" "" }}">Комментарии</a>
+  <div class="teaser">
+    {{ if .Summary }}
+      {{ .Summary }}
+      <a href="{{ .RelPermalink }}">Читать дальше...</a>
+    {{ else }}
+      {{ .Content }}
+    {{ end }}
+  </div>
+{{ end }}

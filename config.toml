@@ -1,0 +1,76 @@
+baseURL = "http://livid.pp.ru/"
+locale = "ru_RU"
+title = "Красноглазый Блог"
+defaultContentLanguage = "ru"
+uglyURLs = true
+disablePathToLower = false
+capitalizeListTitles = false
+
+[pagination]
+pagerSize = 10
+path = "page"
+
+[params]
+disqusShortname = "lividppru"
+googleCx = "012608259635028981684:bhhssxo-oys"
+authorName = "Nikolay \"Livid\" Yakimov"
+feedTitle = "Красноглазый блог"
+feedDescription = "Записки о GNU/Linux и СПО"
+
+[taxonomies]
+tag = "tags"
+yearmonth = "year-month"
+
+[permalinks]
+year-month = "/archive/dates/:slug"
+
+[[menu.main]]
+name="Главная"
+url="/"
+weight=1
+identifier="home"
+
+[[menu.main]]
+name="О сайте"
+url="/static/about.html"
+weight=2
+identifier="about"
+
+[[menu.main]]
+name="Об авторе"
+url="/static/author.html"
+weight=3
+identifier="author"
+
+[[menu.main]]
+name="Архив"
+url="/archive/"
+weight=4
+identifier="archive"
+
+[markup]
+goldmark = { renderer = { unsafe = true } }
+
+[markup.highlight]
+style = "catppuccin-latte"
+
+[outputs]
+home = ["HTML","RSS","ATOM"]
+page = ['html']
+rss = ['rss']
+section = ['html']
+taxonomy = ['html']
+term = ['html']
+
+[outputFormats.atom]
+name = 'Atom'
+mediaType = 'application/atom+xml'
+baseName = 'atom' # Generates /atom.xml (or change baseName to 'feed' for /feed.xml)
+isPlainText = false
+rel = 'alternate'
+
+[mediaTypes."application/atom+xml"]
+suffixes = ["xml"]
+
+[outputFormats.RSS]
+baseName = "rss"

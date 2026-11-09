@@ -1,0 +1,15 @@
+{{ define "main" }}
+<h1><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+<div class="info">
+    {{ if .Date }}
+    Опубликовано {{ time.Format ":date_long" .Date }}
+    {{ end }}
+    {{ with .GetTerms "tags" }}
+    под тегами {{ range $index, $tag := . }}{{- if $index }}, {{ end -}}<a href="{{ $tag.RelPermalink }}">{{ $tag.LinkTitle }}</a>{{ end }}
+    {{ end }}
+</div>
+
+{{ .Content }}
+
+{{ partial "disqus.html" . }}
+{{ end }}

@@ -1,0 +1,25 @@
+<div class="row" id="pagination">
+  <div class="col-xs-3">
+    {{ if .Paginator.HasNext }}
+    <a href="{{ .Paginator.Next.URL }}" class="btn btn-default btn-block">
+      <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+      <span class="pagination-text">Раньше</span>
+    </a>
+    {{ end }}
+  </div>
+  {{ if gt .Paginator.PageNumber 1 }}
+  <div class="col-xs-6 pagenum">
+    Страница {{ .Paginator.PageNumber }} из {{ .Paginator.TotalPages }}
+  </div>
+  {{ else }}
+  <div class="col-xs-6 pagenum"></div>
+  {{ end }}
+  <div class="col-xs-3">
+    {{ if .Paginator.HasPrev }}
+    <a href="{{ .Paginator.Prev.URL }}" class="btn btn-default btn-block">
+      <span class="pagination-text">Позже</span>
+      <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+    </a>
+    {{ end }}
+  </div>
+</div>

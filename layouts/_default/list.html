@@ -1,0 +1,9 @@
+{{ define "main" }}
+{{ if not (eq .Type "page") }}
+<h1>{{ .Title }}</h1>
+{{ end }}
+{{ .Content }}
+{{ if gt .Paginator.PageNumber 1 }}{{ partial "pagination.html" . }}{{ end }}
+{{ partial "post-list.html" . }}
+{{ partial "pagination.html" . }}
+{{ end }}

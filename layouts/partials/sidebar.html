@@ -1,0 +1,20 @@
+<div class="projects col-xs-12">
+  <h2>Мои проекты</h2>
+  <ul>
+    <li><a href="https://github.com/lierdakil">GitHub</a></li>
+  </ul>
+</div>
+<div class="tagCloud col-xs-12">
+  <h2>Теги</h2>
+  {{ $counts := slice }}
+  {{ range site.Taxonomies.tags }}
+    {{ $counts = $counts | append .Count }}
+  {{ end }}
+  {{ $max := math.Max 0 $counts }}
+  {{ range site.Taxonomies.tags.ByCount }}
+    {{ $size := int (math.Add 80 (math.Div (math.Mul 120 .Count) $max)) }}
+    <a href="{{ .Page.RelPermalink }}" style="font-size:{{ $size }}%;" title="{{ .Count }} пост(ов)">
+      {{ .Term }}
+    </a>
+  {{ end }}
+</div>

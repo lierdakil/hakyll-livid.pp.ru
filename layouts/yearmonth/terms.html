@@ -1,0 +1,18 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ range site.RegularPages.GroupByDate "2006" }}
+{{ $year := .Key }}
+{{ if not (eq $year "0001")}}
+<h2>{{ .Key }}</h2>
+<ul>
+{{ range .Pages.GroupByDate "01" }}
+<li>
+  <a href="{{ "/archive/dates/" | relURL }}{{ $year }}-{{ .Key }}.html">
+    {{ index hugo.Data.months (int (replaceRE "^0*" "" .Key)) }} ({{ len .Pages }})
+  </a>
+</li>
+{{ end }}
+</ul>
+{{ end }}
+{{ end }}
+{{ end }}

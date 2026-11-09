@@ -1,0 +1,152 @@
+body {
+  background: #7a7a7a;
+}
+div#page {
+  background: white;
+}
+.navbar-brand {
+  color: #aa0000 !important;
+  font-weight: bold;
+}
+.navbar-brand:hover {
+  color: #dd3333 !important;
+}
+div#google-search {
+  padding-top: 0.3em;
+}
+div#content h1 {
+  text-transform: uppercase;
+  color: #adadad;
+}
+div#content div.date {
+  float: right;
+}
+div#content h2.post-list-title {
+  margin-bottom: 0;
+}
+div#content div.info {
+  color: #555;
+  font-style: italic;
+}
+div#content a {
+  text-decoration: none;
+  color: #aa0000;
+}
+div#content a:hover {
+  color: #dd3333;
+}
+div#content div#pagination {
+  margin-top: 2em;
+  padding-bottom: 1em;
+}
+div#content div#pagination .pagenum {
+  text-align: center;
+  padding-top: 0.5em;
+  color: gray;
+}
+div#content div#pagination a.btn {
+  color: inherit;
+}
+div#content pre {
+  word-wrap: normal;
+}
+div#content pre code {
+  white-space: pre;
+  border: none;
+  background-color: inherit;
+}
+div#content pre .sourceCode .kw {
+  color: #268bd2;
+}
+div#content pre .sourceCode .dt {
+  color: #268bd2;
+}
+div#content pre .sourceCode .dv,
+div#content pre .sourceCode .bn,
+div#content pre .sourceCode .fl {
+  color: #d33682;
+}
+div#content pre .sourceCode .ch {
+  color: #dc322f;
+}
+div#content pre .sourceCode .st {
+  color: #2aa198;
+}
+div#content pre .sourceCode .co {
+  color: #93a1a1;
+}
+div#content pre .sourceCode .ot {
+  color: #a57800;
+}
+div#content pre .sourceCode .al {
+  color: #cb4b16;
+  font-weight: bold;
+}
+div#content pre .sourceCode .fu {
+  color: #268bd2;
+}
+div#content pre .sourceCode .er {
+  color: #d30102;
+  font-weight: bold;
+}
+div#content code {
+  color: inherit;
+  border: solid 1px #ddd;
+}
+div#content blockquote {
+  overflow-x: auto;
+}
+@media (max-width: 991px) {
+  div#content p,
+  div#content a {
+    word-break: break-word;
+  }
+}
+@media (max-width: 767px) {
+  div#content .pagination-text {
+    display: none;
+  }
+}
+div#sidebar {
+  border-top: solid lightgray 1px;
+}
+@media (min-width: 992px) {
+  div#sidebar {
+    border-top: none;
+    border-left: solid lightgray 1px;
+  }
+}
+div#sidebar h2 {
+  text-transform: uppercase;
+  color: #adadad;
+}
+div#footer {
+  border-top: solid 2px black;
+  color: #555;
+  font-size: x-small;
+  text-align: right;
+}
+details {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+  margin-bottom: 1em;
+}
+summary {
+  font-weight: bold;
+  margin: -0.5em -0.5em 0;
+  padding: 0.5em;
+  display: list-item;
+  cursor: pointer;
+}
+details[open] {
+  padding: 0.5em;
+  margin-bottom: initial;
+}
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+div#body img {
+  max-width: 100%;
+}

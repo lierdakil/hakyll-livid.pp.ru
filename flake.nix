@@ -3,9 +3,19 @@
 
   outputs =
     { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      mkpost = pkgs.writeShellScriptBin "mkpost" ''
+        hugo new "posts/$(date +'%Y-%m-%d')-$1.md"
+      '';
+    in
     {
-      packages.x86_64-linux.default =
-        nixpkgs.legacyPackages.x86_64-linux.haskellPackages.callPackage ./package.nix
-          { };
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
+          hugo
+          mkpost
+        ];
+      };
     };
 }

@@ -1,0 +1,12 @@
+{{ define "html-title" }}
+{{ $date := time.AsTime (print .Title "-01") }}
+{{ $year := time.Format "2006" $date }}
+{{ $month := time.Format "1" $date }}
+Посты за {{ index hugo.Data.months (int $month) }} {{ $year }}
+{{ end }}
+{{ define "main" }}
+<h1>{{ block "html-title" . }}{{ end }}</h1>
+{{ partial "pagination.html" . }}
+{{ partial "post-list.html" . }}
+{{ partial "pagination.html" . }}
+{{ end }}

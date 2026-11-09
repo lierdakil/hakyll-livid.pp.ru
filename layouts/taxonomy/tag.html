@@ -1,0 +1,9 @@
+{{ define "html-title" }}
+Посты с тегом {{ .Title }}
+{{ end }}
+{{ define "main" }}
+<h1>{{ block "html-title" . }}{{ end }}</h1>
+{{ partial "pagination.html" . }}
+{{ partial "post-list.html" . }}
+{{ partial "pagination.html" . }}
+{{ end }}

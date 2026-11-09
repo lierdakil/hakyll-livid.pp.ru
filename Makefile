@@ -3,15 +3,13 @@
 all: build
 
 deploy: build
-	git push
 	rclone sync ./_site/ weed:static-sites/livid.pp.ru/
 
 build:
-	nix build .
-	nix run . -- build
+	hugo build --cleanDestinationDir
 
 watch:
-	nix run . -- watch --port --8081
+	hugo server -M
 
 clean:
-	nix run . -- clean
+	rm -rf public

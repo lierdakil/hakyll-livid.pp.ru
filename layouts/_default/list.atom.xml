@@ -1,0 +1,18 @@
+{{ printf `<?xml version="1.0" encoding="utf-8"?>` | safeHTML }}
+<feed xmlns="http://www.w3.org/2005/Atom"{{ with site.Language.Locale }} xml:lang="{{ . }}"{{ end }}>
+  <title>{{ site.Title }}</title>
+  {{ with .OutputFormats.Get "atom" }}
+  <id>{{ .Permalink }}</id>
+  {{ end }}
+  <updated>{{ site.Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</updated>
+  {{ range first 20 (where site.RegularPages.ByDate.Reverse "Section" "posts") }}
+  <entry>
+    <title>{{ .Title }}</title>
+    <link href="{{ .Permalink }}" rel="alternate" />
+    <id>{{ .Permalink }}</id>
+    <published>{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</published>
+    <updated>{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</updated>
+    <summary type="html">{{ printf "<![CDATA[%s]]>" .Summary | safeHTML }}</summary>
+  </entry>
+  {{ end }}
+</feed>
