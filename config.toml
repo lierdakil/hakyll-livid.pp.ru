@@ -9,6 +9,7 @@ capitalizeListTitles = false
 [pagination]
 pagerSize = 10
 path = "page"
+disableAliases = true
 
 [params]
 disqusShortname = "lividppru"

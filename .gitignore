@@ -1,3 +1,4 @@
 /public
 /.direnv
 /.hugo_build.lock
+/.envrc.local
