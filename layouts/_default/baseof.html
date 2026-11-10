@@ -5,12 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ .Site.Title }} - {{ block "html-title" . }}{{ .Title }}{{ end }}</title>
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="/css/default.css" />
+        {{ partial "css.html" "/css/bootstrap.css" }}
+        {{ partial "css.html" "/css/default.css" }}
         <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} (RSS)" href="/rss.xml">
         <link rel="alternate" type="application/atom+xml" title="{{ .Site.Title }} (Atom)" href="/atom.xml">
-        <script src="/js/jquery-1.11.2.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+        {{ partial "js.html" "/js/jquery-1.11.2.min.js" }}
+        {{ partial "js.html" "/js/bootstrap.min.js" }}
     </head>
     <body>
       <nav class="navbar navbar-inverse">

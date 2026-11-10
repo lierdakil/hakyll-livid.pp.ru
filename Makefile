@@ -6,7 +6,7 @@ deploy: build
 	hugo deploy --confirm
 
 build:
-	hugo build --cleanDestinationDir
+	hugo build --cleanDestinationDir --minify
 
 watch:
 	hugo server -M

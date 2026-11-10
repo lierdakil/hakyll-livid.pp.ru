@@ -1,0 +1,2 @@
+{{- $js := resources.Get . | minify | fingerprint -}}
+<script src="{{ $js.RelPermalink }}"></script>
