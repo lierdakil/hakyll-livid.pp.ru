@@ -48,8 +48,11 @@ url="/archive/"
 weight=4
 identifier="archive"
 
-[markup]
-goldmark = { renderer = { unsafe = true } }
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.goldmark.parser]
+wrapStandAloneImageWithinParagraph = false
 
 [markup.highlight]
 style = "catppuccin-latte"

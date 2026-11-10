@@ -1,11 +1,22 @@
 {{- $img := .Page.Resources.GetMatch .Destination -}}
 {{- if $img -}}
   {{- $optimized := $img.Process "webp" -}}
-  <img src="{{ $optimized.RelPermalink }}"
-       width="{{ $optimized.Width }}"
-       height="{{ $optimized.Height }}"
-       alt="{{ .Text }}"
-       loading="lazy">
+  {{- if .IsBlock -}}
+    <figure>
+      <img src="{{ $optimized.RelPermalink }}"
+        width="{{ $optimized.Width }}"
+        height="{{ $optimized.Height }}"
+        {{ with .PlainText }}alt="{{ . }}"{{ end }}
+        loading="lazy">
+      {{- with .Text }}<figcaption>{{ . }}</figcaption>{{ end -}}
+    </figure>
+  {{- else -}}
+    <img src="{{ $optimized.RelPermalink }}"
+        width="{{ $optimized.Width }}"
+        height="{{ $optimized.Height }}"
+        {{ with .PlainText }}alt="{{ . }}"{{ end }}
+        loading="lazy">
+  {{- end -}}
 {{- else -}}
   {{- errorf "Bad image url dest %s page %s" .Destination .Page.Path -}}
 {{- end -}}
