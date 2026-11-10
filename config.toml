@@ -55,7 +55,7 @@ goldmark = { renderer = { unsafe = true } }
 style = "catppuccin-latte"
 
 [outputs]
-home = ["HTML","RSS","ATOM"]
+home = ["HTML","RSS","ATOM","JSON"]
 page = ['html']
 rss = ['rss']
 section = ['html']

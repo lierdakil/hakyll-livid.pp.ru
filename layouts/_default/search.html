@@ -12,61 +12,54 @@
   <div id="search-results" class="mt-3"></div>
 </div>
 <script>
-  // Build index from Hugo at build time
-  const SEARCH_INDEX = [
-    {{ $pages := where .Site.RegularPages "Section" "posts" }}
-    {{ range $i, $p := $pages }}
-      {{ if $i }},{{ end }}
-    {
-      "title": {{ $p.Title }},
-      "url": {{ $p.RelPermalink }},
-      "summary": {{ $p.Summary | plainify }}
+  (async function() {
+    // Build index from Hugo at build time
+    const fetched = await fetch("/index.json");
+    const SEARCH_INDEX = await fetched.json();
+
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q') || '';
+    const input = document.getElementById('search-input');
+    if (query) input.value = query;
+
+    function render(results) {
+      const container = document.getElementById('search-results');
+      if (!query) {
+        container.innerHTML = '<p>Введите запрос для поиска по сайту.</p>';
+        return;
+      }
+      if (results.length === 0) {
+        container.innerHTML = '<p>Ничего не найдено.</p>';
+        return;
+      }
+      console.log(results);
+      container.innerHTML = '<ul class="list-unstyled">' + results.map(r =>
+        `<li class="mb-3"><a href="${r.url}"><strong>${r.title}</strong></a><p class="text-muted small">${r.summary}</p></li>`
+      ).join('') + '</ul>';
     }
-    {{ end }}
-  ];
 
-  const params = new URLSearchParams(window.location.search);
-  const query = params.get('q') || '';
-  const input = document.getElementById('search-input');
-  if (query) input.value = query;
-
-  function render(results) {
-    const container = document.getElementById('search-results');
-    if (!query) {
-      container.innerHTML = '<p>Введите запрос для поиска по сайту.</p>';
-      return;
+    function search(q) {
+      if (!q) return [];
+      const lower = q.toLowerCase();
+      return SEARCH_INDEX.filter(item =>
+        item.title.toLowerCase().includes(lower) ||
+        item.summary.toLowerCase().includes(lower)
+      ).slice(0, 50);
     }
-    if (results.length === 0) {
-      container.innerHTML = '<p>Ничего не найдено.</p>';
-      return;
-    }
-    console.log(results);
-    container.innerHTML = '<ul class="list-unstyled">' + results.map(r =>
-      `<li class="mb-3"><a href="${r.url}"><strong>${r.title}</strong></a><p class="text-muted small">${r.summary}</p></li>`
-    ).join('') + '</ul>';
-  }
 
-  function search(q) {
-    if (!q) return [];
-    const lower = q.toLowerCase();
-    return SEARCH_INDEX.filter(item =>
-      item.title.toLowerCase().includes(lower) ||
-      item.summary.toLowerCase().includes(lower)
-    ).slice(0, 50);
-  }
+    render(search(query));
 
-  render(search(query));
-
-  document.getElementById('search-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const q = document.getElementById('search-input').value.trim();
-    const url = new URL(window.location.href);
-    if (q) {
-      url.searchParams.set('q', q);
-    } else {
-      url.searchParams.delete('q');
-    }
-    window.location.href = url.toString();
-  });
+    document.getElementById('search-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const q = document.getElementById('search-input').value.trim();
+      const url = new URL(window.location.href);
+      if (q) {
+        url.searchParams.set('q', q);
+      } else {
+        url.searchParams.delete('q');
+      }
+      window.location.href = url.toString();
+    });
+  })();
 </script>
 {{ end }}
