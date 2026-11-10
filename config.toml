@@ -13,7 +13,6 @@ disableAliases = true
 
 [params]
 disqusShortname = "lividppru"
-googleCx = "012608259635028981684:bhhssxo-oys"
 authorName = "Nikolay \"Livid\" Yakimov"
 feedTitle = "Красноглазый блог"
 feedDescription = "Записки о GNU/Linux и СПО"
