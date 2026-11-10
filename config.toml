@@ -1,5 +1,5 @@
 baseURL = "http://livid.pp.ru/"
-locale = "ru_RU"
+locale = "ru"
 title = "Красноглазый Блог"
 defaultContentLanguage = "ru"
 uglyURLs = true
