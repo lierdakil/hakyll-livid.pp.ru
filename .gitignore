@@ -2,3 +2,4 @@
 /.direnv
 /.hugo_build.lock
 /.envrc.local
+/resources/_gen

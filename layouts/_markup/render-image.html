@@ -1,0 +1,11 @@
+{{- $img := .Page.Resources.GetMatch .Destination -}}
+{{- if $img -}}
+  {{- $optimized := $img.Process "webp" -}}
+  <img src="{{ $optimized.RelPermalink }}"
+       width="{{ $optimized.Width }}"
+       height="{{ $optimized.Height }}"
+       alt="{{ .Text }}"
+       loading="lazy">
+{{- else -}}
+  {{- errorf "Bad image url dest %s page %s" .Destination .Page.Path -}}
+{{- end -}}

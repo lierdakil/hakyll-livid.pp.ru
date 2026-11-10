@@ -149,6 +149,7 @@ details[open] summary {
 }
 div#body img {
   max-width: 100%;
+  object-fit: contain;
 }
 #search-box {
   margin-top: 1.5ex;
